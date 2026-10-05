@@ -47,13 +47,21 @@ def serialize(row, fields) -> str:
 
 
 class QwenRegressor(torch.nn.Module):
-    def __init__(self, n_out: int, mode: str = "lora", lora_r: int = 16, init: str = "pretrained"):
+    def __init__(
+        self, n_out: int, mode: str = "lora", lora_r: int = 16, init: str = "pretrained", pool: str = "eos", n_layers: int = 0
+    ):
         super().__init__()
         if init == "pretrained":
-            backbone = AutoModel.from_pretrained(C.QWEN_MODEL, revision=C.QWEN_REVISION, torch_dtype=torch.float32)
+            backbone = AutoModel.from_pretrained(C.QWEN_MODEL, revision=C.QWEN_REVISION, dtype=torch.float32)
         else:  # architecture-only control: same network, no pretraining
             cfg = AutoConfig.from_pretrained(C.QWEN_MODEL, revision=C.QWEN_REVISION)
-            backbone = AutoModel.from_config(cfg, torch_dtype=torch.float32)
+            backbone = AutoModel.from_config(cfg, dtype=torch.float32)
+        if n_layers:  # keep only the first n decoder blocks (the final norm is kept and applied to block n)
+            backbone.layers = backbone.layers[:n_layers]
+            backbone.config.num_hidden_layers = n_layers
+            if getattr(backbone.config, "layer_types", None):
+                backbone.config.layer_types = backbone.config.layer_types[:n_layers]
+        self.pool = pool
         if mode == "lora":
             lcfg = LoraConfig(
                 r=lora_r,
@@ -75,7 +83,13 @@ class QwenRegressor(torch.nn.Module):
     def forward(self, input_ids, attention_mask):
         h = self.backbone(input_ids=input_ids, attention_mask=attention_mask).last_hidden_state
         last = attention_mask.sum(dim=1) - 1  # right padding -> index of the appended EOS token
-        pooled = h[torch.arange(h.size(0), device=h.device), last]
+        rows = torch.arange(h.size(0), device=h.device)
+        if self.pool == "eos":
+            pooled = h[rows, last]
+        else:  # mean over prompt tokens, excluding the appended EOS
+            m = attention_mask.clone()
+            m[rows, last] = 0
+            pooled = (h * m[..., None]).sum(1) / m.sum(1, keepdim=True).clamp(min=1)
         return self.head(pooled.float())
 
 
@@ -158,7 +172,9 @@ def train(args) -> None:
         tr = np.random.default_rng(args.seed).choice(tr, size=min(args.max_train_rows, len(tr)), replace=False)
     res = torch.tensor(task.Y - mu)  # residual targets, CPU
 
-    model = QwenRegressor(task.Y.shape[1], mode=args.mode, lora_r=args.lora_r, init=args.init).to(device)
+    model = QwenRegressor(
+        task.Y.shape[1], mode=args.mode, lora_r=args.lora_r, init=args.init, pool=args.pool, n_layers=args.n_layers
+    ).to(device)
     n_train = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"trainable parameters: {n_train / 1e6:.2f}M")
     head_params = list(model.head.parameters())
@@ -239,6 +255,8 @@ def main() -> None:
     ap.add_argument("--mode", choices=["lora", "frozen", "full"], default="lora")
     ap.add_argument("--init", choices=["pretrained", "random"], default="pretrained")
     ap.add_argument("--lora-r", type=int, default=16)
+    ap.add_argument("--pool", choices=["eos", "mean"], default="eos")
+    ap.add_argument("--n-layers", type=int, default=0, help="truncate the backbone to its first N blocks (0 = all 24)")
     ap.add_argument("--epochs", type=int, default=2)
     ap.add_argument("--batch-size", type=int, default=64)
     ap.add_argument("--max-tokens", type=int, default=6144, help="padded-token cap per micro-batch (memory)")

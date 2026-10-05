@@ -1,0 +1,47 @@
+{
+  "n_trt_signatures": 102797,
+  "n_dmso_signatures": 6467,
+  "norm_median": {
+    "dmso": 30.402246475219727,
+    "treated": 32.142799377441406
+  },
+  "dmso_norm_q95_global": 44.46509552001953,
+  "frac_active": {
+    "train": 0.1677747411573028,
+    "val": 0.18458718799092338,
+    "test": 0.12743746306874137
+  },
+  "replicate_pairs": {
+    "n_pairs": 4456,
+    "pearson_median": 0.1875399351119995,
+    "pearson_mean": 0.2729682922363281,
+    "pearson_mean_both_active": 0.6348607540130615,
+    "pearson_mean_not_both_active": 0.16865871846675873,
+    "residual_pearson_mean": 0.24219517409801483
+  },
+  "context_r2": {
+    "train_in_sample": 0.03265804052352905,
+    "val_heldout_compounds": 0.023558378219604492
+  },
+  "counts": {
+    "by_time_h": {
+      "3.0": 4950,
+      "6.0": 1094,
+      "24.0": 96753
+    },
+    "by_cell_top10": {
+      "MCF7": 12065,
+      "A375": 11431,
+      "PC3": 11359,
+      "HT29": 11178,
+      "HA1E": 11153,
+      "YAPC": 9400,
+      "HELA": 9385,
+      "A549": 1954,
+      "HCC515": 1776,
+      "HEPG2": 1775
+    },
+    "signatures_per_compound_median": 42.0,
+    "test_max_tanimoto_to_train_median": 0.35714285714285715
+  }
+}

@@ -13,8 +13,8 @@ import pandas as pd
 
 from pertpred import config as C
 from pertpred.data import load_signatures
-from pertpred.metrics import METRICS, paired_difference, per_signature_metrics, summarize
-from pertpred.task import Task
+from pertpred.metrics import METRICS, centered_pearson, paired_difference, per_signature_metrics, summarize
+from pertpred.task import Task, context_key
 
 PER_SIG_DIR = C.RESULTS_DIR / "per_signature"
 
@@ -78,10 +78,10 @@ def score_split(name: str, task: Task, mu: np.ndarray, idx_all: np.ndarray, pred
 
 
 def val_selection_score(task: Task, mu: np.ndarray, idx: np.ndarray, pred: np.ndarray) -> float:
-    """Model-selection criterion on val: compound-level mean centered_pearson."""
+    """Model-selection criterion on val: compound-level mean centered_pearson (only that metric, for speed)."""
     meta = task.meta.iloc[idx]
-    per_sig = per_signature_metrics(pred, task.Y[idx], mu[idx], meta)
-    return float(per_sig.groupby("group_id")["centered_pearson"].mean().mean())
+    r = centered_pearson(pred, task.Y[idx], context_key(meta))
+    return float(pd.Series(r).groupby(meta["group_id"].to_numpy()).mean().mean())
 
 
 # ---------------------------------------------------------------- report
@@ -98,7 +98,7 @@ def _fmt(s: pd.DataFrame) -> pd.Series:
     return s.apply(lambda r: f"{r['mean']:.3f} [{r['ci_lo']:.3f}, {r['ci_hi']:.3f}]", axis=1)
 
 
-def report(split: str = "test", reference: str = "context_mean") -> None:
+def report(split: str = "test", reference: str = "mlp_fp") -> None:
     tables = _load_per_sig(split)
     if not tables:
         raise SystemExit(f"no scored predictions for split={split}")
@@ -134,10 +134,71 @@ def report(split: str = "test", reference: str = "context_mean") -> None:
         (out_dir / f"paired_vs_{reference}_{split}.md").write_text(dtab.to_markdown())
         print(f"\npaired (model - {reference}), compound bootstrap:\n{dtab.to_string()}")
 
-    _strata(tables, out_dir, split)
+    strata = _strata(tables, out_dir, split)
+    _plot_summary(tables, out_dir, split)
+    _plot_similarity(strata, out_dir, split)
 
 
-def _strata(tables: dict[str, pd.DataFrame], out_dir, split: str) -> None:
+MODEL_ORDER = ["zero", "context_mean", "knn_tanimoto", "ridge_fp", "mlp_fp"]
+
+
+def _ordered(names) -> list[str]:
+    base = [n for n in MODEL_ORDER if n in names]
+    return base + sorted(n for n in names if n not in MODEL_ORDER)
+
+
+def _plot_summary(tables: dict[str, pd.DataFrame], out_dir, split: str) -> None:
+    """Dot + 95% CI per model for the two compound-specific metrics, all signatures and active only."""
+    from pertpred.plotstyle import INK2, NEUTRAL, SERIES, plt, setup
+
+    setup()
+    names = _ordered(tables)
+    panels = [("centered_pearson", "centered Pearson (higher is better)", 0.0), ("retrieval", "retrieval rank (lower is better)", 0.5)]
+    fig, axes = plt.subplots(1, 2, figsize=(9.6, 0.42 * len(names) + 1.4), sharey=True)
+    y = np.arange(len(names))[::-1]
+    for ax, (metric, label, chance) in zip(axes, panels):
+        for k, (subset, color, dy) in enumerate([("all", SERIES[0], 0.12), ("active", SERIES[1], -0.12)]):
+            for yi, n in zip(y, names):
+                df = tables[n] if subset == "all" else tables[n][tables[n]["active"]]
+                s = summarize(df, n_boot=500).loc[metric]
+                ax.plot([s["ci_lo"], s["ci_hi"]], [yi + dy] * 2, color=color, lw=2, solid_capstyle="round")
+                ax.plot(s["mean"], yi + dy, "o", ms=6, color=color, mec="white", mew=1.2,
+                        label=("all test signatures" if subset == "all" else "active only (> DMSO 95th pct)") if yi == y[0] else None)
+        ax.axvline(chance, color=NEUTRAL, lw=1.2, ls="--")
+        ax.set_xlabel(label)
+        ax.grid(axis="y", visible=False)
+    axes[0].set_yticks(y, names)
+    axes[0].legend(loc="lower right", fontsize=8)
+    axes[1].text(0.5, y[0] + 0.45, "chance", color=INK2, fontsize=8, ha="center")
+    fig.suptitle(f"Held-out compounds ({split}): compound-level mean with 95% bootstrap CI", fontsize=11)
+    fig.savefig(out_dir / f"models_{split}.png")
+    plt.close(fig)
+
+
+def _plot_similarity(strata: pd.DataFrame, out_dir, split: str) -> None:
+    """centered_pearson vs similarity of the test compound to its nearest training compound."""
+    from pertpred.plotstyle import SERIES, plt, setup
+
+    setup()
+    s = strata[(strata["stratum"] == "tani_bin") & (strata["level"] != "nan")]
+    show = [n for n in ("knn_tanimoto", "mlp_fp", "qwen_full") if n in set(s["model"])]
+    fig, ax = plt.subplots(figsize=(6.4, 3.4))
+    for color, name in zip(SERIES, show):
+        g = s[s["model"] == name]
+        ax.plot(g["level"], g["centered_pearson"], marker="o", ms=6, color=color, label=name)
+    counts = s[s["model"] == show[0]][["level", "n_cmp"]] if show else []
+    if len(counts):
+        ax.set_xticks(range(len(counts)), [f"{lv}\n{n} cmpds" for lv, n in zip(counts["level"], counts["n_cmp"])])
+    ax.axhline(0, color="#8a8984", lw=1.2, ls="--")
+    ax.set_xlabel("max Tanimoto similarity to any training compound")
+    ax.set_ylabel("centered Pearson")
+    ax.set_title("Compound-specific accuracy vs chemical novelty")
+    ax.legend(loc="upper left")
+    fig.savefig(out_dir / f"similarity_{split}.png")
+    plt.close(fig)
+
+
+def _strata(tables: dict[str, pd.DataFrame], out_dir, split: str) -> pd.DataFrame:
     def comp_mean(df, metric):
         return df.groupby("group_id")[metric].mean().mean()
 
@@ -161,6 +222,7 @@ def _strata(tables: dict[str, pd.DataFrame], out_dir, split: str) -> None:
                 )
     strata = pd.DataFrame(pieces)
     strata.to_csv(out_dir / f"strata_{split}.csv", index=False, float_format="%.4f")
+    return strata
 
 
 if __name__ == "__main__":
@@ -168,6 +230,6 @@ if __name__ == "__main__":
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="test")
-    ap.add_argument("--reference", default="context_mean")
+    ap.add_argument("--reference", default="mlp_fp", help="model every other model is paired against")
     a = ap.parse_args()
     report(a.split, a.reference)

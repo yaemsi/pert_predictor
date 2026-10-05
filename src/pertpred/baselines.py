@@ -100,9 +100,11 @@ def ridge_predict(task: Task, mu: np.ndarray, query_idx: np.ndarray, alphas: lis
 
 
 class FPMLP(torch.nn.Module):
-    def __init__(self, n_cells: int, n_times: int, n_doses: int, n_genes: int, hidden: int = 1024, dropout: float = 0.2):
+    """Compound features -> 512, concatenated with learned cell / time / dose embeddings -> genes."""
+
+    def __init__(self, n_cells: int, n_times: int, n_doses: int, n_genes: int, d_in: int = 2048, hidden: int = 1024, dropout: float = 0.2):
         super().__init__()
-        self.fp = torch.nn.Sequential(torch.nn.Linear(2048, 512), torch.nn.GELU(), torch.nn.Dropout(dropout))
+        self.fp = torch.nn.Sequential(torch.nn.Linear(d_in, 512), torch.nn.GELU(), torch.nn.Dropout(dropout))
         self.cell = torch.nn.Embedding(n_cells, 32)
         self.time = torch.nn.Embedding(n_times, 8)
         self.dose = torch.nn.Embedding(n_doses, 8)
@@ -115,13 +117,19 @@ class FPMLP(torch.nn.Module):
         return self.head(h)
 
 
-def mlp_predict(task: Task, mu: np.ndarray, epochs: int = 40, seed: int = C.SEED) -> tuple[np.ndarray, np.ndarray, list[float]]:
-    """Train on train, early-stop on val centered_pearson. Returns (val+test idx, predictions, val curve)."""
+def mlp_predict(
+    task: Task, mu: np.ndarray, features: np.ndarray | None = None, epochs: int = 40, seed: int = C.SEED
+) -> tuple[np.ndarray, np.ndarray, list[float]]:
+    """Train on train, early-stop on val centered_pearson. Returns (val+test idx, predictions, val curve).
+
+    `features` is one compound-feature row per task row; defaults to Morgan bits. The frozen-Qwen probe
+    passes LLM embeddings here so the two representations are compared under an identical model.
+    """
     torch.manual_seed(seed)
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     meta = task.meta
     codes = {c: pd.Categorical(as_str(meta[c])).codes for c in ("cell_id", "time_h", "dose_bin")}
-    fps = load_fps(meta)
+    fps = load_fps(meta) if features is None else features
     res = task.Y - mu
 
     def tensors(idx):
@@ -135,7 +143,7 @@ def mlp_predict(task: Task, mu: np.ndarray, epochs: int = 40, seed: int = C.SEED
     X_tr, Y_tr = tensors(tr), torch.tensor(res[tr], device=dev)
     X_q = tensors(q)
     n_lvls = [int(codes[c].max()) + 1 for c in ("cell_id", "time_h", "dose_bin")]
-    model = FPMLP(*n_lvls, n_genes=res.shape[1]).to(dev)
+    model = FPMLP(*n_lvls, n_genes=res.shape[1], d_in=fps.shape[1]).to(dev)
     opt = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=epochs)
 

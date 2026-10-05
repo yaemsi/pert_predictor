@@ -93,6 +93,15 @@ def center_within_context(x: np.ndarray, context: np.ndarray) -> np.ndarray:
     return out
 
 
+def centered_pearson(pred: np.ndarray, true: np.ndarray, context: np.ndarray) -> np.ndarray:
+    """Per-signature Pearson after within-context centering of predictions and observations."""
+    pc = center_within_context(np.asarray(pred, dtype=np.float64), context)
+    tc = center_within_context(np.asarray(true, dtype=np.float64), context)
+    out = rowwise_pearson(np.nan_to_num(pc), np.nan_to_num(tc))
+    out[np.isnan(pc).any(axis=1)] = np.nan
+    return out
+
+
 def per_signature_metrics(pred: np.ndarray, true: np.ndarray, mu: np.ndarray, meta: pd.DataFrame) -> pd.DataFrame:
     """One row per signature. `meta` must carry sig_id, group_id, cell_id, time_h, dose_bin."""
     pred = np.asarray(pred, dtype=np.float64)
@@ -100,9 +109,7 @@ def per_signature_metrics(pred: np.ndarray, true: np.ndarray, mu: np.ndarray, me
     mu = np.asarray(mu, dtype=np.float64)
     pred_res, true_res = pred - mu, true - mu
     context = context_key(meta)
-    pc, tc = center_within_context(pred, context), center_within_context(true, context)
-    centered = rowwise_pearson(np.nan_to_num(pc), np.nan_to_num(tc))
-    centered[np.isnan(pc).any(axis=1)] = np.nan
+    centered = centered_pearson(pred, true, context)
     return pd.DataFrame(
         {
             "sig_id": meta["sig_id"].to_numpy(),

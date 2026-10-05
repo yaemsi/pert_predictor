@@ -1,0 +1,69 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+example prompt (qwen_full):
+cell line: A375 (skin)
+time: 24 h
+dose: 10 uM
+compound: oxaprozin
+smiles: OC(=O)CCc1nc(c(o1)-c1ccccc1)-c1ccccc1
+---
+prompt tokens: median=74 max=220
+trainable parameters: 9.68M
+step 50/2380 epoch 0 loss 1.4485 (122 rows/s)
+step 100/2380 epoch 0 loss 1.5841 (145 rows/s)
+step 150/2380 epoch 0 loss 1.2644 (147 rows/s)
+step 200/2380 epoch 0 loss 2.3518 (155 rows/s)
+step 250/2380 epoch 0 loss 1.4963 (157 rows/s)
+  [val] step 297 centered_pearson=-0.0032 mse=1.6050
+step 300/2380 epoch 0 loss 1.5568 (122 rows/s)
+step 350/2380 epoch 0 loss 1.5846 (126 rows/s)
+step 400/2380 epoch 0 loss 1.5691 (129 rows/s)
+step 450/2380 epoch 0 loss 2.2203 (132 rows/s)
+step 500/2380 epoch 0 loss 1.6724 (135 rows/s)
+step 550/2380 epoch 0 loss 2.0569 (138 rows/s)
+  [val] step 594 centered_pearson=0.0004 mse=1.6134
+step 600/2380 epoch 0 loss 2.4152 (126 rows/s)
+step 650/2380 epoch 0 loss 1.2984 (129 rows/s)
+step 700/2380 epoch 0 loss 1.6990 (131 rows/s)
+step 750/2380 epoch 0 loss 2.5896 (134 rows/s)
+step 800/2380 epoch 0 loss 1.3175 (135 rows/s)
+step 850/2380 epoch 0 loss 1.8203 (137 rows/s)
+  [val] step 891 centered_pearson=0.0137 mse=1.6035
+step 900/2380 epoch 0 loss 1.3954 (128 rows/s)
+step 950/2380 epoch 0 loss 1.2633 (130 rows/s)
+step 1000/2380 epoch 0 loss 1.3328 (132 rows/s)
+step 1050/2380 epoch 0 loss 1.3782 (133 rows/s)
+step 1100/2380 epoch 0 loss 1.9002 (135 rows/s)
+step 1150/2380 epoch 0 loss 1.9238 (136 rows/s)
+  [val] step 1188 centered_pearson=0.0122 mse=1.6035
+step 1200/2380 epoch 1 loss 1.6684 (130 rows/s)
+step 1250/2380 epoch 1 loss 1.3595 (131 rows/s)
+step 1300/2380 epoch 1 loss 2.6653 (132 rows/s)
+step 1350/2380 epoch 1 loss 1.4216 (133 rows/s)
+step 1400/2380 epoch 1 loss 1.5075 (134 rows/s)
+step 1450/2380 epoch 1 loss 1.5069 (135 rows/s)
+  [val] step 1485 centered_pearson=0.0308 mse=1.6040
+step 1500/2380 epoch 1 loss 1.2286 (130 rows/s)
+step 1550/2380 epoch 1 loss 1.2826 (131 rows/s)
+step 1600/2380 epoch 1 loss 1.9286 (132 rows/s)
+step 1650/2380 epoch 1 loss 1.8102 (133 rows/s)
+step 1700/2380 epoch 1 loss 1.1580 (133 rows/s)
+step 1750/2380 epoch 1 loss 2.2158 (134 rows/s)
+  [val] step 1782 centered_pearson=0.0354 mse=1.6102
+step 1800/2380 epoch 1 loss 1.2598 (131 rows/s)
+step 1850/2380 epoch 1 loss 1.5548 (132 rows/s)
+step 1900/2380 epoch 1 loss 1.9255 (133 rows/s)
+step 1950/2380 epoch 1 loss 1.4142 (133 rows/s)
+step 2000/2380 epoch 1 loss 1.2068 (134 rows/s)
+step 2050/2380 epoch 1 loss 1.3274 (135 rows/s)
+  [val] step 2079 centered_pearson=0.0387 mse=1.6177
+step 2100/2380 epoch 1 loss 2.4293 (132 rows/s)
+step 2150/2380 epoch 1 loss 1.2599 (133 rows/s)
+step 2200/2380 epoch 1 loss 1.4623 (133 rows/s)
+step 2250/2380 epoch 1 loss 2.2610 (134 rows/s)
+step 2300/2380 epoch 1 loss 1.3515 (135 rows/s)
+step 2350/2380 epoch 1 loss 1.8431 (136 rows/s)
+  [val] step 2376 centered_pearson=0.0433 mse=1.6175
+  [val] step 2380 centered_pearson=0.0433 mse=1.6174
+best val centered_pearson=0.0433 at step 2380
+[qwen_full | val] pearson=0.2025  centered_pearson=0.0433  delta_pearson=0.0555  retrieval=0.4658  topk_dir=0.1576  rmse=1.1624
+[qwen_full | test] pearson=0.1999  centered_pearson=0.0440  delta_pearson=0.0612  retrieval=0.4680  topk_dir=0.1547  rmse=1.1269
