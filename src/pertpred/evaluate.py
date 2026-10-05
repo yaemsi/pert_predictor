@@ -140,6 +140,12 @@ def report(split: str = "test", reference: str = "mlp_fp") -> None:
 
 
 MODEL_ORDER = ["zero", "context_mean", "knn_tanimoto", "ridge_fp", "mlp_fp"]
+# Headline figure: baselines, then frozen Qwen (val-selected pooling only), then LoRA Qwen.
+PLOT_GROUPS = [
+    ("baselines", ["zero", "context_mean", "knn_tanimoto", "ridge_fp", "mlp_fp"]),
+    ("frozen Qwen + MLP", ["probe_name+smiles_mean24", "probe_smiles_mean24", "probe_name_mean24", "probe_fp+qwen_mean24"]),
+    ("Qwen LoRA", ["qwen_full", "qwen_main", "qwen_smiles", "qwen_name", "qwen_ctx"]),
+]
 
 
 def _ordered(names) -> list[str]:
@@ -152,25 +158,40 @@ def _plot_summary(tables: dict[str, pd.DataFrame], out_dir, split: str) -> None:
     from pertpred.plotstyle import INK2, NEUTRAL, SERIES, plt, setup
 
     setup()
-    names = _ordered(tables)
+    names, ypos, group_rows, y = [], [], [], 0.0
+    for label, members in PLOT_GROUPS:
+        present = [n for n in members if n in tables]
+        if not present:
+            continue
+        group_rows.append((label, y))
+        y += 0.9
+        for n in present:
+            names.append(n)
+            ypos.append(y)
+            y += 1.0
+        y += 0.4
+    ypos = -np.asarray(ypos)
     panels = [("centered_pearson", "centered Pearson (higher is better)", 0.0), ("retrieval", "retrieval rank (lower is better)", 0.5)]
-    fig, axes = plt.subplots(1, 2, figsize=(9.6, 0.42 * len(names) + 1.4), sharey=True)
-    y = np.arange(len(names))[::-1]
+    fig, axes = plt.subplots(1, 2, figsize=(9.6, 0.36 * y + 1.2), sharey=True)
     for ax, (metric, label, chance) in zip(axes, panels):
-        for k, (subset, color, dy) in enumerate([("all", SERIES[0], 0.12), ("active", SERIES[1], -0.12)]):
-            for yi, n in zip(y, names):
+        for subset, color, dy in [("all", SERIES[0], 0.14), ("active", SERIES[1], -0.14)]:
+            for yi, n in zip(ypos, names):
                 df = tables[n] if subset == "all" else tables[n][tables[n]["active"]]
                 s = summarize(df, n_boot=500).loc[metric]
                 ax.plot([s["ci_lo"], s["ci_hi"]], [yi + dy] * 2, color=color, lw=2, solid_capstyle="round")
                 ax.plot(s["mean"], yi + dy, "o", ms=6, color=color, mec="white", mew=1.2,
-                        label=("all test signatures" if subset == "all" else "active only (> DMSO 95th pct)") if yi == y[0] else None)
+                        label=("all test signatures" if subset == "all" else "active only (norm > DMSO 95th pct)") if yi == ypos[0] else None)
         ax.axvline(chance, color=NEUTRAL, lw=1.2, ls="--")
         ax.set_xlabel(label)
         ax.grid(axis="y", visible=False)
-    axes[0].set_yticks(y, names)
-    axes[0].legend(loc="lower right", fontsize=8)
-    axes[1].text(0.5, y[0] + 0.45, "chance", color=INK2, fontsize=8, ha="center")
-    fig.suptitle(f"Held-out compounds ({split}): compound-level mean with 95% bootstrap CI", fontsize=11)
+    axes[0].set_yticks(ypos, names)
+    for label, gy in group_rows:
+        axes[0].text(-0.02, -gy, label, transform=axes[0].get_yaxis_transform(), ha="right", va="center",
+                     fontsize=9, fontweight="bold", color=INK2)
+    axes[1].text(0.5, ypos[0] + 0.6, "chance", color=INK2, fontsize=8, ha="center")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 0.995), fontsize=8.5)
+    fig.suptitle(f"Held-out compounds ({split}): compound-level mean, 95% bootstrap CI over compounds", fontsize=11, y=1.03)
     fig.savefig(out_dir / f"models_{split}.png")
     plt.close(fig)
 
@@ -181,7 +202,7 @@ def _plot_similarity(strata: pd.DataFrame, out_dir, split: str) -> None:
 
     setup()
     s = strata[(strata["stratum"] == "tani_bin") & (strata["level"] != "nan")]
-    show = [n for n in ("knn_tanimoto", "mlp_fp", "qwen_full") if n in set(s["model"])]
+    show = [n for n in ("knn_tanimoto", "mlp_fp", "qwen_main") if n in set(s["model"])]
     fig, ax = plt.subplots(figsize=(6.4, 3.4))
     for color, name in zip(SERIES, show):
         g = s[s["model"] == name]

@@ -21,7 +21,7 @@ import torch
 from transformers import AutoModel, AutoTokenizer
 
 from pertpred import config as C
-from pertpred.baselines import mlp_predict
+from pertpred.baselines import load_fps, mlp_predict
 from pertpred.evaluate import save_predictions, score_split, val_selection_score
 from pertpred.task import fit_context_mean, load_task
 
@@ -87,31 +87,50 @@ def run(name: str, task, mu, feat_rows: np.ndarray, log: dict) -> float:
     return v
 
 
-def main() -> None:
+EMB_PATH = C.CACHE_DIR / "probe_embeddings.npz"
+LOG_PATH = C.RESULTS_DIR / "logs" / "probe.json"
+
+
+def main(stage: str) -> None:
     task = load_task()
     _, mu = fit_context_mean(task)
     cmp = task.meta.drop_duplicates("pert_id").reset_index(drop=True)
     row_to_cmp = pd.Series(np.arange(len(cmp)), index=cmp["pert_id"]).loc[task.meta["pert_id"]].to_numpy()
     train_mask = (cmp["split"] == "train").to_numpy()
-    log = {}
 
-    feats = {v: embed([compound_text(r, v) for r in cmp.itertuples()]) for v in TEXTS}
+    if stage == "all":
+        log = {}
+        feats = {v: embed([compound_text(r, v) for r in cmp.itertuples()]) for v in TEXTS}
+        np.savez(EMB_PATH, pert_id=cmp["pert_id"].to_numpy(), **{f"{v}|{p}{l}": a for v, d in feats.items() for (p, l), a in d.items()})
 
-    scores = {}
-    for pool, layer in POOLS:
-        name = f"probe_name+smiles_{pool}{layer}"
-        f = standardize(feats["name+smiles"][(pool, layer)], train_mask)
-        scores[(pool, layer)] = run(name, task, mu, f[row_to_cmp], log)
-    best = max(scores, key=scores.get)
-    print(f"probe pooling chosen on val: {best} ({scores[best]:.4f})")
-    log["chosen_pooling"] = list(best)
+        scores = {}
+        for pool, layer in POOLS:
+            name = f"probe_name+smiles_{pool}{layer}"
+            f = standardize(feats["name+smiles"][(pool, layer)], train_mask)
+            scores[(pool, layer)] = run(name, task, mu, f[row_to_cmp], log)
+        best = max(scores, key=scores.get)
+        print(f"probe pooling chosen on val: {best} ({scores[best]:.4f})")
+        log["chosen_pooling"] = list(best)
 
-    for v in ("smiles", "name"):
-        f = standardize(feats[v][best], train_mask)
-        run(f"probe_{v}_{best[0]}{best[1]}", task, mu, f[row_to_cmp], log)
+        for v in ("smiles", "name"):
+            f = standardize(feats[v][best], train_mask)
+            run(f"probe_{v}_{best[0]}{best[1]}", task, mu, f[row_to_cmp], log)
+        LOG_PATH.write_text(json.dumps(log, indent=2))
 
-    (C.RESULTS_DIR / "logs" / "probe.json").write_text(json.dumps(log, indent=2))
+    # Does Qwen add anything on top of chemistry? Morgan bits concatenated with the chosen embedding.
+    log = json.loads(LOG_PATH.read_text())
+    pool, layer = log["chosen_pooling"]
+    emb = np.load(EMB_PATH, allow_pickle=True)
+    assert (emb["pert_id"] == cmp["pert_id"].to_numpy()).all()
+    q = standardize(emb[f"name+smiles|{pool}{layer}"], train_mask)
+    fp = load_fps(cmp).astype(np.float32)
+    run(f"probe_fp+qwen_{pool}{layer}", task, mu, np.concatenate([fp, q], axis=1)[row_to_cmp], log)
+    LOG_PATH.write_text(json.dumps(log, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--stage", choices=["all", "fp_concat"], default="all", help="fp_concat reuses cached embeddings")
+    main(ap.parse_args().stage)

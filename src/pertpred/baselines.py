@@ -218,3 +218,21 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+def mlp_seed_variance(seeds=(1, 2, 3, 4)) -> None:
+    """Training-run variance of mlp_fp (bootstrap CIs only cover test-set sampling, not this)."""
+    import json
+
+    from pertpred.metrics import per_signature_metrics, summarize
+
+    task = load_task()
+    _, mu = fit_context_mean(task)
+    out = {}
+    for seed in seeds:
+        q, pred, _ = mlp_predict(task, mu, seed=seed)
+        te = task.meta["split"].to_numpy()[q] == "test"
+        s = summarize(per_signature_metrics(pred[te], task.Y[q[te]], mu[q[te]], task.meta.iloc[q[te]]), n_boot=1)
+        out[seed] = {m: float(s.loc[m, "mean"]) for m in ("centered_pearson", "retrieval", "pearson")}
+        print(seed, out[seed], flush=True)
+    (C.RESULTS_DIR / "logs" / "mlp_seed_variance.json").write_text(json.dumps(out, indent=2))

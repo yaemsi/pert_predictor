@@ -1,0 +1,625 @@
+model,stratum,level,n_sig,n_cmp,centered_pearson,pearson,retrieval
+context_mean,cell_id,A375,1722,264,0.0000,0.1844,0.5000
+context_mean,cell_id,A549,269,46,0.0000,0.2196,0.5000
+context_mean,cell_id,ASC,168,28,0.0000,0.1876,0.5000
+context_mean,cell_id,ASC.C,168,28,0.0000,0.2235,0.5000
+context_mean,cell_id,BT20,168,14,0.0000,0.2385,0.5000
+context_mean,cell_id,CD34,168,28,0.0000,0.2438,0.5000
+context_mean,cell_id,HA1E,1695,260,0.0000,0.1846,0.5000
+context_mean,cell_id,HCC515,252,42,0.0000,0.1821,0.5000
+context_mean,cell_id,HELA,1445,238,0.0000,0.2058,0.5000
+context_mean,cell_id,HEPG2,252,42,0.0000,0.2122,0.5000
+context_mean,cell_id,HME1,228,33,0.0000,0.2162,0.5000
+context_mean,cell_id,HS578T,168,14,0.0000,0.2008,0.5000
+context_mean,cell_id,HT29,1697,260,0.0000,0.2051,0.5000
+context_mean,cell_id,HUES3,36,6,0.0000,0.1539,0.5000
+context_mean,cell_id,HUVEC,168,28,0.0000,0.2598,0.5000
+context_mean,cell_id,JURKAT,36,6,0.0000,0.2119,0.5000
+context_mean,cell_id,LNCAP,60,5,0.0000,0.2379,0.5000
+context_mean,cell_id,MCF10A,168,14,0.0000,0.2206,0.5000
+context_mean,cell_id,MCF7,1799,263,0.0000,0.2040,0.5000
+context_mean,cell_id,MDAMB231,167,14,0.0000,0.2434,0.5000
+context_mean,cell_id,MNEU.E,36,6,0.0000,0.2512,0.5000
+context_mean,cell_id,NEU,168,28,0.0000,0.2753,0.5000
+context_mean,cell_id,NPC,179,30,0.0000,0.2556,0.5000
+context_mean,cell_id,NPC.CAS9,167,28,0.0000,0.2567,0.5000
+context_mean,cell_id,NPC.TAK,185,32,0.0000,0.2538,0.5000
+context_mean,cell_id,PC3,1713,263,0.0000,0.1902,0.5000
+context_mean,cell_id,SKBR3,168,14,0.0000,0.2080,0.5000
+context_mean,cell_id,SKL,168,28,0.0000,0.2335,0.5000
+context_mean,cell_id,SKL.C,168,28,0.0000,0.2545,0.5000
+context_mean,cell_id,YAPC,1445,238,0.0000,0.2071,0.5000
+context_mean,time_h,3.0,564,14,0.0000,0.2387,0.5000
+context_mean,time_h,6.0,113,10,0.0000,0.0823,0.5000
+context_mean,time_h,24.0,14554,260,0.0000,0.2024,0.5000
+context_mean,dose_bin,0.04,2522,260,0.0000,0.2114,0.5000
+context_mean,dose_bin,0.12,2530,261,0.0000,0.2057,0.5000
+context_mean,dose_bin,0.37,2522,260,0.0000,0.2030,0.5000
+context_mean,dose_bin,1.11,2529,260,0.0000,0.1903,0.5000
+context_mean,dose_bin,3.33,2593,263,0.0000,0.1893,0.5000
+context_mean,dose_bin,10.0,2529,260,0.0000,0.2134,0.5000
+context_mean,dose_bin,20.0,6,1,0.0000,0.1579,
+context_mean,is_named,True,15231,264,0.0000,0.1999,0.5000
+context_mean,active,False,13290,263,0.0000,0.1852,0.5000
+context_mean,active,True,1941,213,0.0000,0.3455,0.5000
+context_mean,tani_bin,"(-0.001, 0.3]",4292,75,0.0000,0.2055,0.5000
+context_mean,tani_bin,"(0.3, 0.4]",4958,83,0.0000,0.1944,0.5000
+context_mean,tani_bin,"(0.4, 0.5]",2441,48,0.0000,0.2077,0.5000
+context_mean,tani_bin,"(0.5, 0.7]",2790,46,0.0000,0.1936,0.5000
+context_mean,tani_bin,"(0.7, 1.0]",750,12,0.0000,0.1952,0.5000
+knn_tanimoto,cell_id,A375,1722,264,0.0599,0.1662,0.4334
+knn_tanimoto,cell_id,A549,269,46,0.0491,0.2226,0.4297
+knn_tanimoto,cell_id,ASC,168,28,-0.0015,0.1508,0.5062
+knn_tanimoto,cell_id,ASC.C,168,28,0.0328,0.2020,0.4284
+knn_tanimoto,cell_id,BT20,168,14,0.1097,0.2530,0.3649
+knn_tanimoto,cell_id,CD34,168,28,0.0229,0.2220,0.4850
+knn_tanimoto,cell_id,HA1E,1695,260,0.0414,0.1565,0.4337
+knn_tanimoto,cell_id,HCC515,252,42,0.0264,0.1602,0.4728
+knn_tanimoto,cell_id,HELA,1445,238,0.0438,0.1735,0.4323
+knn_tanimoto,cell_id,HEPG2,252,42,0.0177,0.1859,0.4583
+knn_tanimoto,cell_id,HME1,228,33,0.0317,0.2146,0.4376
+knn_tanimoto,cell_id,HS578T,168,14,0.0974,0.2185,0.3599
+knn_tanimoto,cell_id,HT29,1697,260,0.0434,0.1729,0.4512
+knn_tanimoto,cell_id,HUES3,36,6,0.0565,0.1527,0.4389
+knn_tanimoto,cell_id,HUVEC,168,28,0.0190,0.2425,0.4751
+knn_tanimoto,cell_id,JURKAT,36,6,0.0376,0.1955,0.4333
+knn_tanimoto,cell_id,LNCAP,60,5,0.0630,0.2490,0.4500
+knn_tanimoto,cell_id,MCF10A,168,14,0.0694,0.2341,0.4542
+knn_tanimoto,cell_id,MCF7,1799,263,0.0403,0.1721,0.4365
+knn_tanimoto,cell_id,MDAMB231,167,14,0.0718,0.2510,0.3978
+knn_tanimoto,cell_id,MNEU.E,36,6,0.0258,0.2105,0.4500
+knn_tanimoto,cell_id,NEU,168,28,0.0364,0.2551,0.4444
+knn_tanimoto,cell_id,NPC,179,30,0.0121,0.2207,0.4699
+knn_tanimoto,cell_id,NPC.CAS9,167,28,0.0169,0.2217,0.4906
+knn_tanimoto,cell_id,NPC.TAK,185,32,0.0277,0.2299,0.4842
+knn_tanimoto,cell_id,PC3,1713,263,0.0328,0.1531,0.4431
+knn_tanimoto,cell_id,SKBR3,168,14,0.0946,0.2205,0.3622
+knn_tanimoto,cell_id,SKL,168,28,-0.0010,0.2024,0.4773
+knn_tanimoto,cell_id,SKL.C,168,28,0.0277,0.2359,0.4336
+knn_tanimoto,cell_id,YAPC,1445,238,0.0405,0.1742,0.4351
+knn_tanimoto,time_h,3.0,564,14,0.0635,0.2348,0.3892
+knn_tanimoto,time_h,6.0,113,10,-0.0004,0.0959,0.5037
+knn_tanimoto,time_h,24.0,14554,260,0.0435,0.1732,0.4387
+knn_tanimoto,dose_bin,0.04,2522,260,0.0189,0.1647,0.4664
+knn_tanimoto,dose_bin,0.12,2530,261,0.0220,0.1625,0.4715
+knn_tanimoto,dose_bin,0.37,2522,260,0.0313,0.1681,0.4555
+knn_tanimoto,dose_bin,1.11,2529,260,0.0390,0.1618,0.4404
+knn_tanimoto,dose_bin,3.33,2593,263,0.0513,0.1689,0.4192
+knn_tanimoto,dose_bin,10.0,2529,260,0.0961,0.2125,0.3780
+knn_tanimoto,dose_bin,20.0,6,1,0.0000,0.2097,
+knn_tanimoto,is_named,True,15231,264,0.0426,0.1716,0.4382
+knn_tanimoto,active,False,13290,263,0.0337,0.1555,0.4449
+knn_tanimoto,active,True,1941,213,0.0666,0.2934,0.4038
+knn_tanimoto,tani_bin,"(-0.001, 0.3]",4292,75,0.0162,0.1595,0.4824
+knn_tanimoto,tani_bin,"(0.3, 0.4]",4958,83,0.0274,0.1578,0.4658
+knn_tanimoto,tani_bin,"(0.4, 0.5]",2441,48,0.0841,0.2040,0.3699
+knn_tanimoto,tani_bin,"(0.5, 0.7]",2790,46,0.0624,0.1772,0.4055
+knn_tanimoto,tani_bin,"(0.7, 1.0]",750,12,0.0710,0.1905,0.3719
+mlp_fp,cell_id,A375,1722,264,0.0843,0.1743,0.4249
+mlp_fp,cell_id,A549,269,46,0.0629,0.2317,0.4303
+mlp_fp,cell_id,ASC,168,28,-0.0315,0.1517,0.5423
+mlp_fp,cell_id,ASC.C,168,28,0.0049,0.1898,0.4960
+mlp_fp,cell_id,BT20,168,14,0.1255,0.2650,0.3164
+mlp_fp,cell_id,CD34,168,28,0.0239,0.2224,0.5073
+mlp_fp,cell_id,HA1E,1695,260,0.0433,0.1616,0.4580
+mlp_fp,cell_id,HCC515,252,42,0.0715,0.2027,0.4185
+mlp_fp,cell_id,HELA,1445,238,0.0559,0.1855,0.4301
+mlp_fp,cell_id,HEPG2,252,42,0.0493,0.1980,0.4256
+mlp_fp,cell_id,HME1,228,33,0.0395,0.2117,0.4204
+mlp_fp,cell_id,HS578T,168,14,0.1265,0.2466,0.3201
+mlp_fp,cell_id,HT29,1697,260,0.0521,0.1785,0.4521
+mlp_fp,cell_id,HUES3,36,6,0.0387,0.1395,0.4667
+mlp_fp,cell_id,HUVEC,168,28,0.0257,0.2337,0.4826
+mlp_fp,cell_id,JURKAT,36,6,0.0268,0.1898,0.4500
+mlp_fp,cell_id,LNCAP,60,5,0.1747,0.2817,0.2333
+mlp_fp,cell_id,MCF10A,168,14,0.1066,0.2634,0.3654
+mlp_fp,cell_id,MCF7,1799,263,0.0534,0.1804,0.4419
+mlp_fp,cell_id,MDAMB231,167,14,0.1046,0.2574,0.3641
+mlp_fp,cell_id,MNEU.E,36,6,0.0393,0.2202,0.4444
+mlp_fp,cell_id,NEU,168,28,-0.0183,0.2350,0.5368
+mlp_fp,cell_id,NPC,179,30,0.0126,0.2295,0.4877
+mlp_fp,cell_id,NPC.CAS9,167,28,0.0055,0.2109,0.5183
+mlp_fp,cell_id,NPC.TAK,185,32,0.0271,0.2252,0.4910
+mlp_fp,cell_id,PC3,1713,263,0.0472,0.1678,0.4386
+mlp_fp,cell_id,SKBR3,168,14,0.1393,0.2715,0.3173
+mlp_fp,cell_id,SKL,168,28,0.0114,0.2073,0.4830
+mlp_fp,cell_id,SKL.C,168,28,0.0068,0.2230,0.5157
+mlp_fp,cell_id,YAPC,1445,238,0.0523,0.1847,0.4430
+mlp_fp,time_h,3.0,564,14,0.0868,0.2470,0.3529
+mlp_fp,time_h,6.0,113,10,0.0158,0.0985,0.4630
+mlp_fp,time_h,24.0,14554,260,0.0549,0.1829,0.4431
+mlp_fp,dose_bin,0.04,2522,260,0.0087,0.1734,0.4914
+mlp_fp,dose_bin,0.12,2530,261,0.0254,0.1778,0.4696
+mlp_fp,dose_bin,0.37,2522,260,0.0376,0.1837,0.4546
+mlp_fp,dose_bin,1.11,2529,260,0.0528,0.1730,0.4420
+mlp_fp,dose_bin,3.33,2593,263,0.0774,0.1797,0.4166
+mlp_fp,dose_bin,10.0,2529,260,0.1230,0.2073,0.3863
+mlp_fp,dose_bin,20.0,6,1,0.0000,0.0609,
+mlp_fp,is_named,True,15231,264,0.0539,0.1809,0.4424
+mlp_fp,active,False,13290,263,0.0475,0.1671,0.4476
+mlp_fp,active,True,1941,213,0.0548,0.2791,0.4121
+mlp_fp,tani_bin,"(-0.001, 0.3]",4292,75,0.0227,0.1653,0.4787
+mlp_fp,tani_bin,"(0.3, 0.4]",4958,83,0.0443,0.1737,0.4620
+mlp_fp,tani_bin,"(0.4, 0.5]",2441,48,0.0999,0.2086,0.3856
+mlp_fp,tani_bin,"(0.5, 0.7]",2790,46,0.0692,0.1859,0.4104
+mlp_fp,tani_bin,"(0.7, 1.0]",750,12,0.0714,0.1977,0.4305
+probe_fp+qwen_mean24,cell_id,A375,1722,264,0.1048,0.1705,0.4451
+probe_fp+qwen_mean24,cell_id,A549,269,46,0.0476,0.1896,0.4379
+probe_fp+qwen_mean24,cell_id,ASC,168,28,-0.0078,0.1483,0.5093
+probe_fp+qwen_mean24,cell_id,ASC.C,168,28,-0.0035,0.1568,0.5320
+probe_fp+qwen_mean24,cell_id,BT20,168,14,0.0928,0.2434,0.3727
+probe_fp+qwen_mean24,cell_id,CD34,168,28,-0.0147,0.1828,0.4912
+probe_fp+qwen_mean24,cell_id,HA1E,1695,260,0.0601,0.1600,0.4591
+probe_fp+qwen_mean24,cell_id,HCC515,252,42,0.0401,0.1680,0.4496
+probe_fp+qwen_mean24,cell_id,HELA,1445,238,0.0471,0.1802,0.4699
+probe_fp+qwen_mean24,cell_id,HEPG2,252,42,0.0690,0.2054,0.4194
+probe_fp+qwen_mean24,cell_id,HME1,228,33,0.0424,0.1919,0.4392
+probe_fp+qwen_mean24,cell_id,HS578T,168,14,0.0957,0.2150,0.3810
+probe_fp+qwen_mean24,cell_id,HT29,1697,260,0.0724,0.1856,0.4591
+probe_fp+qwen_mean24,cell_id,HUES3,36,6,0.0559,0.0726,0.4556
+probe_fp+qwen_mean24,cell_id,HUVEC,168,28,0.0137,0.2032,0.4685
+probe_fp+qwen_mean24,cell_id,JURKAT,36,6,0.0120,0.1007,0.4556
+probe_fp+qwen_mean24,cell_id,LNCAP,60,5,0.1608,0.2672,0.2750
+probe_fp+qwen_mean24,cell_id,MCF10A,168,14,0.0887,0.2225,0.4103
+probe_fp+qwen_mean24,cell_id,MCF7,1799,263,0.0685,0.1809,0.4441
+probe_fp+qwen_mean24,cell_id,MDAMB231,167,14,0.0705,0.2196,0.4105
+probe_fp+qwen_mean24,cell_id,MNEU.E,36,6,0.0575,0.1557,0.4389
+probe_fp+qwen_mean24,cell_id,NEU,168,28,-0.0201,0.2178,0.5194
+probe_fp+qwen_mean24,cell_id,NPC,179,30,0.0012,0.1999,0.4976
+probe_fp+qwen_mean24,cell_id,NPC.CAS9,167,28,0.0101,0.2001,0.4884
+probe_fp+qwen_mean24,cell_id,NPC.TAK,185,32,0.0155,0.2037,0.4923
+probe_fp+qwen_mean24,cell_id,PC3,1713,263,0.0531,0.1650,0.4612
+probe_fp+qwen_mean24,cell_id,SKBR3,168,14,0.0958,0.2186,0.3759
+probe_fp+qwen_mean24,cell_id,SKL,168,28,0.0199,0.1818,0.4782
+probe_fp+qwen_mean24,cell_id,SKL.C,168,28,0.0145,0.2001,0.4912
+probe_fp+qwen_mean24,cell_id,YAPC,1445,238,0.0597,0.1852,0.4506
+probe_fp+qwen_mean24,time_h,3.0,564,14,0.0615,0.2131,0.3935
+probe_fp+qwen_mean24,time_h,6.0,113,10,0.0125,0.0883,0.4470
+probe_fp+qwen_mean24,time_h,24.0,14554,260,0.0655,0.1799,0.4551
+probe_fp+qwen_mean24,dose_bin,0.04,2522,260,0.0158,0.1769,0.4974
+probe_fp+qwen_mean24,dose_bin,0.12,2530,261,0.0366,0.1762,0.4755
+probe_fp+qwen_mean24,dose_bin,0.37,2522,260,0.0526,0.1807,0.4659
+probe_fp+qwen_mean24,dose_bin,1.11,2529,260,0.0660,0.1679,0.4552
+probe_fp+qwen_mean24,dose_bin,3.33,2593,263,0.0804,0.1693,0.4442
+probe_fp+qwen_mean24,dose_bin,10.0,2529,260,0.1355,0.2047,0.3951
+probe_fp+qwen_mean24,dose_bin,20.0,6,1,0.0000,0.0626,
+probe_fp+qwen_mean24,is_named,True,15231,264,0.0640,0.1775,0.4562
+probe_fp+qwen_mean24,active,False,13290,263,0.0597,0.1610,0.4633
+probe_fp+qwen_mean24,active,True,1941,213,0.0288,0.2963,0.4343
+probe_fp+qwen_mean24,tani_bin,"(-0.001, 0.3]",4292,75,0.0295,0.1593,0.5030
+probe_fp+qwen_mean24,tani_bin,"(0.3, 0.4]",4958,83,0.0606,0.1678,0.4614
+probe_fp+qwen_mean24,tani_bin,"(0.4, 0.5]",2441,48,0.0930,0.2008,0.4270
+probe_fp+qwen_mean24,tani_bin,"(0.5, 0.7]",2790,46,0.0882,0.1937,0.4141
+probe_fp+qwen_mean24,tani_bin,"(0.7, 1.0]",750,12,0.0940,0.2029,0.4056
+probe_name+smiles_eos12,cell_id,A375,1722,264,0.0560,0.1820,0.4607
+probe_name+smiles_eos12,cell_id,A549,269,46,-0.0028,0.2122,0.5159
+probe_name+smiles_eos12,cell_id,ASC,168,28,0.0003,0.1750,0.4914
+probe_name+smiles_eos12,cell_id,ASC.C,168,28,0.0010,0.1994,0.4718
+probe_name+smiles_eos12,cell_id,BT20,168,14,0.0492,0.2358,0.4148
+probe_name+smiles_eos12,cell_id,CD34,168,28,-0.0045,0.2229,0.5088
+probe_name+smiles_eos12,cell_id,HA1E,1695,260,0.0305,0.1760,0.4647
+probe_name+smiles_eos12,cell_id,HCC515,252,42,0.0075,0.1825,0.4740
+probe_name+smiles_eos12,cell_id,HELA,1445,238,0.0251,0.1956,0.4904
+probe_name+smiles_eos12,cell_id,HEPG2,252,42,0.0235,0.2050,0.4434
+probe_name+smiles_eos12,cell_id,HME1,228,33,0.0190,0.2218,0.4747
+probe_name+smiles_eos12,cell_id,HS578T,168,14,0.0484,0.2148,0.4428
+probe_name+smiles_eos12,cell_id,HT29,1697,260,0.0345,0.1951,0.4791
+probe_name+smiles_eos12,cell_id,HUES3,36,6,0.0068,0.1464,0.4778
+probe_name+smiles_eos12,cell_id,HUVEC,168,28,0.0234,0.2525,0.4769
+probe_name+smiles_eos12,cell_id,JURKAT,36,6,-0.0055,0.2081,0.4722
+probe_name+smiles_eos12,cell_id,LNCAP,60,5,0.1493,0.2696,0.2583
+probe_name+smiles_eos12,cell_id,MCF10A,168,14,0.0410,0.2317,0.4570
+probe_name+smiles_eos12,cell_id,MCF7,1799,263,0.0395,0.1996,0.4486
+probe_name+smiles_eos12,cell_id,MDAMB231,167,14,0.0237,0.2376,0.4529
+probe_name+smiles_eos12,cell_id,MNEU.E,36,6,0.0462,0.2533,0.4111
+probe_name+smiles_eos12,cell_id,NEU,168,28,-0.0050,0.2512,0.4874
+probe_name+smiles_eos12,cell_id,NPC,179,30,0.0084,0.2381,0.5018
+probe_name+smiles_eos12,cell_id,NPC.CAS9,167,28,-0.0083,0.2312,0.5260
+probe_name+smiles_eos12,cell_id,NPC.TAK,185,32,0.0161,0.2385,0.4822
+probe_name+smiles_eos12,cell_id,PC3,1713,263,0.0316,0.1799,0.4655
+probe_name+smiles_eos12,cell_id,SKBR3,168,14,0.0486,0.2265,0.4135
+probe_name+smiles_eos12,cell_id,SKL,168,28,-0.0024,0.2186,0.4923
+probe_name+smiles_eos12,cell_id,SKL.C,168,28,0.0030,0.2409,0.4821
+probe_name+smiles_eos12,cell_id,YAPC,1445,238,0.0272,0.1965,0.4747
+probe_name+smiles_eos12,time_h,3.0,564,14,0.0500,0.2390,0.4230
+probe_name+smiles_eos12,time_h,6.0,113,10,-0.0007,0.0739,0.4830
+probe_name+smiles_eos12,time_h,24.0,14554,260,0.0354,0.1958,0.4670
+probe_name+smiles_eos12,dose_bin,0.04,2522,260,0.0008,0.1971,0.4965
+probe_name+smiles_eos12,dose_bin,0.12,2530,261,0.0107,0.1950,0.4825
+probe_name+smiles_eos12,dose_bin,0.37,2522,260,0.0251,0.1971,0.4753
+probe_name+smiles_eos12,dose_bin,1.11,2529,260,0.0343,0.1846,0.4658
+probe_name+smiles_eos12,dose_bin,3.33,2593,263,0.0466,0.1852,0.4553
+probe_name+smiles_eos12,dose_bin,10.0,2529,260,0.0946,0.2149,0.4283
+probe_name+smiles_eos12,dose_bin,20.0,6,1,0.0000,0.1416,
+probe_name+smiles_eos12,is_named,True,15231,264,0.0348,0.1936,0.4678
+probe_name+smiles_eos12,active,False,13290,263,0.0331,0.1814,0.4713
+probe_name+smiles_eos12,active,True,1941,213,0.0015,0.2981,0.4853
+probe_name+smiles_eos12,tani_bin,"(-0.001, 0.3]",4292,75,0.0204,0.1851,0.4882
+probe_name+smiles_eos12,tani_bin,"(0.3, 0.4]",4958,83,0.0381,0.1926,0.4647
+probe_name+smiles_eos12,tani_bin,"(0.4, 0.5]",2441,48,0.0504,0.2096,0.4459
+probe_name+smiles_eos12,tani_bin,"(0.5, 0.7]",2790,46,0.0438,0.1962,0.4483
+probe_name+smiles_eos12,tani_bin,"(0.7, 1.0]",750,12,0.0052,0.1781,0.5240
+probe_name+smiles_eos24,cell_id,A375,1722,264,0.0568,0.1801,0.4646
+probe_name+smiles_eos24,cell_id,A549,269,46,0.0151,0.2056,0.5025
+probe_name+smiles_eos24,cell_id,ASC,168,28,-0.0036,0.1747,0.5148
+probe_name+smiles_eos24,cell_id,ASC.C,168,28,-0.0198,0.1925,0.5445
+probe_name+smiles_eos24,cell_id,BT20,168,14,0.0599,0.2395,0.4121
+probe_name+smiles_eos24,cell_id,CD34,168,28,0.0040,0.2230,0.5201
+probe_name+smiles_eos24,cell_id,HA1E,1695,260,0.0243,0.1751,0.4842
+probe_name+smiles_eos24,cell_id,HCC515,252,42,0.0140,0.1793,0.4978
+probe_name+smiles_eos24,cell_id,HELA,1445,238,0.0259,0.1986,0.4699
+probe_name+smiles_eos24,cell_id,HEPG2,252,42,0.0217,0.2088,0.4839
+probe_name+smiles_eos24,cell_id,HME1,228,33,-0.0080,0.2093,0.5371
+probe_name+smiles_eos24,cell_id,HS578T,168,14,0.0443,0.2035,0.4602
+probe_name+smiles_eos24,cell_id,HT29,1697,260,0.0503,0.2031,0.4627
+probe_name+smiles_eos24,cell_id,HUES3,36,6,-0.0011,0.1475,0.5278
+probe_name+smiles_eos24,cell_id,HUVEC,168,28,0.0234,0.2478,0.4881
+probe_name+smiles_eos24,cell_id,JURKAT,36,6,-0.0088,0.1992,0.4778
+probe_name+smiles_eos24,cell_id,LNCAP,60,5,0.0894,0.2566,0.4292
+probe_name+smiles_eos24,cell_id,MCF10A,168,14,0.0141,0.2176,0.5224
+probe_name+smiles_eos24,cell_id,MCF7,1799,263,0.0451,0.2018,0.4518
+probe_name+smiles_eos24,cell_id,MDAMB231,167,14,0.0641,0.2463,0.4200
+probe_name+smiles_eos24,cell_id,MNEU.E,36,6,0.0351,0.2545,0.3889
+probe_name+smiles_eos24,cell_id,NEU,168,28,0.0236,0.2644,0.4616
+probe_name+smiles_eos24,cell_id,NPC,179,30,0.0049,0.2301,0.5061
+probe_name+smiles_eos24,cell_id,NPC.CAS9,167,28,-0.0034,0.2207,0.5125
+probe_name+smiles_eos24,cell_id,NPC.TAK,185,32,0.0145,0.2259,0.5043
+probe_name+smiles_eos24,cell_id,PC3,1713,263,0.0321,0.1826,0.4634
+probe_name+smiles_eos24,cell_id,SKBR3,168,14,0.0389,0.2048,0.4556
+probe_name+smiles_eos24,cell_id,SKL,168,28,0.0103,0.2210,0.4771
+probe_name+smiles_eos24,cell_id,SKL.C,168,28,-0.0001,0.2356,0.5154
+probe_name+smiles_eos24,cell_id,YAPC,1445,238,0.0296,0.1990,0.4831
+probe_name+smiles_eos24,time_h,3.0,564,14,0.0518,0.2383,0.4173
+probe_name+smiles_eos24,time_h,6.0,113,10,0.0187,0.0777,0.3985
+probe_name+smiles_eos24,time_h,24.0,14554,260,0.0380,0.1969,0.4665
+probe_name+smiles_eos24,dose_bin,0.04,2522,260,0.0029,0.2024,0.4924
+probe_name+smiles_eos24,dose_bin,0.12,2530,261,0.0180,0.1972,0.4789
+probe_name+smiles_eos24,dose_bin,0.37,2522,260,0.0323,0.2001,0.4615
+probe_name+smiles_eos24,dose_bin,1.11,2529,260,0.0370,0.1838,0.4727
+probe_name+smiles_eos24,dose_bin,3.33,2593,263,0.0504,0.1860,0.4579
+probe_name+smiles_eos24,dose_bin,10.0,2529,260,0.0889,0.2123,0.4285
+probe_name+smiles_eos24,dose_bin,20.0,6,1,0.0000,0.1198,
+probe_name+smiles_eos24,is_named,True,15231,264,0.0381,0.1949,0.4662
+probe_name+smiles_eos24,active,False,13290,263,0.0397,0.1828,0.4729
+probe_name+smiles_eos24,active,True,1941,213,-0.0146,0.3064,0.4643
+probe_name+smiles_eos24,tani_bin,"(-0.001, 0.3]",4292,75,0.0322,0.1926,0.4832
+probe_name+smiles_eos24,tani_bin,"(0.3, 0.4]",4958,83,0.0423,0.1924,0.4598
+probe_name+smiles_eos24,tani_bin,"(0.4, 0.5]",2441,48,0.0383,0.2063,0.4553
+probe_name+smiles_eos24,tani_bin,"(0.5, 0.7]",2790,46,0.0421,0.1952,0.4504
+probe_name+smiles_eos24,tani_bin,"(0.7, 1.0]",750,12,0.0294,0.1792,0.5080
+probe_name+smiles_mean12,cell_id,A375,1722,264,0.0723,0.1863,0.4287
+probe_name+smiles_mean12,cell_id,A549,269,46,0.0274,0.2159,0.4964
+probe_name+smiles_mean12,cell_id,ASC,168,28,-0.0070,0.1681,0.4859
+probe_name+smiles_mean12,cell_id,ASC.C,168,28,0.0053,0.1922,0.4848
+probe_name+smiles_mean12,cell_id,BT20,168,14,0.0431,0.2331,0.4382
+probe_name+smiles_mean12,cell_id,CD34,168,28,0.0111,0.2118,0.4837
+probe_name+smiles_mean12,cell_id,HA1E,1695,260,0.0396,0.1783,0.4545
+probe_name+smiles_mean12,cell_id,HCC515,252,42,0.0190,0.1744,0.4799
+probe_name+smiles_mean12,cell_id,HELA,1445,238,0.0384,0.1985,0.4532
+probe_name+smiles_mean12,cell_id,HEPG2,252,42,0.0120,0.2000,0.4662
+probe_name+smiles_mean12,cell_id,HME1,228,33,0.0150,0.2198,0.4963
+probe_name+smiles_mean12,cell_id,HS578T,168,14,0.0610,0.2178,0.4061
+probe_name+smiles_mean12,cell_id,HT29,1697,260,0.0325,0.1958,0.4609
+probe_name+smiles_mean12,cell_id,HUES3,36,6,0.0355,0.1494,0.3333
+probe_name+smiles_mean12,cell_id,HUVEC,168,28,0.0219,0.2429,0.4464
+probe_name+smiles_mean12,cell_id,JURKAT,36,6,0.0059,0.1775,0.5278
+probe_name+smiles_mean12,cell_id,LNCAP,60,5,0.0847,0.2511,0.4583
+probe_name+smiles_mean12,cell_id,MCF10A,168,14,0.0330,0.2265,0.4629
+probe_name+smiles_mean12,cell_id,MCF7,1799,263,0.0422,0.1969,0.4547
+probe_name+smiles_mean12,cell_id,MDAMB231,167,14,0.0381,0.2413,0.4359
+probe_name+smiles_mean12,cell_id,MNEU.E,36,6,-0.0014,0.2184,0.4833
+probe_name+smiles_mean12,cell_id,NEU,168,28,0.0013,0.2472,0.4857
+probe_name+smiles_mean12,cell_id,NPC,179,30,0.0147,0.2204,0.4685
+probe_name+smiles_mean12,cell_id,NPC.CAS9,167,28,0.0419,0.2335,0.4578
+probe_name+smiles_mean12,cell_id,NPC.TAK,185,32,0.0151,0.2167,0.4898
+probe_name+smiles_mean12,cell_id,PC3,1713,263,0.0358,0.1840,0.4569
+probe_name+smiles_mean12,cell_id,SKBR3,168,14,0.0133,0.2120,0.4505
+probe_name+smiles_mean12,cell_id,SKL,168,28,-0.0060,0.2069,0.4808
+probe_name+smiles_mean12,cell_id,SKL.C,168,28,0.0131,0.2316,0.4680
+probe_name+smiles_mean12,cell_id,YAPC,1445,238,0.0291,0.1968,0.4667
+probe_name+smiles_mean12,time_h,3.0,564,14,0.0291,0.2322,0.4469
+probe_name+smiles_mean12,time_h,6.0,113,10,-0.0020,0.0796,0.4978
+probe_name+smiles_mean12,time_h,24.0,14554,260,0.0410,0.1965,0.4529
+probe_name+smiles_mean12,dose_bin,0.04,2522,260,0.0079,0.1988,0.4806
+probe_name+smiles_mean12,dose_bin,0.12,2530,261,0.0135,0.1943,0.4758
+probe_name+smiles_mean12,dose_bin,0.37,2522,260,0.0265,0.1973,0.4639
+probe_name+smiles_mean12,dose_bin,1.11,2529,260,0.0361,0.1875,0.4536
+probe_name+smiles_mean12,dose_bin,3.33,2593,263,0.0454,0.1847,0.4491
+probe_name+smiles_mean12,dose_bin,10.0,2529,260,0.1119,0.2146,0.3980
+probe_name+smiles_mean12,dose_bin,20.0,6,1,0.0000,0.1014,
+probe_name+smiles_mean12,is_named,True,15231,264,0.0397,0.1941,0.4530
+probe_name+smiles_mean12,active,False,13290,263,0.0352,0.1820,0.4609
+probe_name+smiles_mean12,active,True,1941,213,0.0431,0.3030,0.4249
+probe_name+smiles_mean12,tani_bin,"(-0.001, 0.3]",4292,75,0.0280,0.1885,0.4668
+probe_name+smiles_mean12,tani_bin,"(0.3, 0.4]",4958,83,0.0406,0.1904,0.4552
+probe_name+smiles_mean12,tani_bin,"(0.4, 0.5]",2441,48,0.0358,0.1994,0.4497
+probe_name+smiles_mean12,tani_bin,"(0.5, 0.7]",2790,46,0.0540,0.1991,0.4399
+probe_name+smiles_mean12,tani_bin,"(0.7, 1.0]",750,12,0.0669,0.2151,0.4141
+probe_name+smiles_mean24,cell_id,A375,1722,264,0.0794,0.1894,0.4338
+probe_name+smiles_mean24,cell_id,A549,269,46,0.0215,0.2087,0.4729
+probe_name+smiles_mean24,cell_id,ASC,168,28,0.0023,0.1706,0.4885
+probe_name+smiles_mean24,cell_id,ASC.C,168,28,-0.0288,0.1696,0.5538
+probe_name+smiles_mean24,cell_id,BT20,168,14,0.0664,0.2438,0.4153
+probe_name+smiles_mean24,cell_id,CD34,168,28,-0.0241,0.1938,0.5379
+probe_name+smiles_mean24,cell_id,HA1E,1695,260,0.0355,0.1747,0.4744
+probe_name+smiles_mean24,cell_id,HCC515,252,42,0.0009,0.1614,0.4895
+probe_name+smiles_mean24,cell_id,HELA,1445,238,0.0363,0.1959,0.4661
+probe_name+smiles_mean24,cell_id,HEPG2,252,42,0.0210,0.1973,0.4738
+probe_name+smiles_mean24,cell_id,HME1,228,33,0.0172,0.2067,0.4814
+probe_name+smiles_mean24,cell_id,HS578T,168,14,0.0639,0.2077,0.4199
+probe_name+smiles_mean24,cell_id,HT29,1697,260,0.0376,0.1949,0.4772
+probe_name+smiles_mean24,cell_id,HUES3,36,6,-0.0173,0.1243,0.5389
+probe_name+smiles_mean24,cell_id,HUVEC,168,28,0.0112,0.2306,0.5218
+probe_name+smiles_mean24,cell_id,JURKAT,36,6,0.0221,0.1444,0.4833
+probe_name+smiles_mean24,cell_id,LNCAP,60,5,0.1221,0.2584,0.3250
+probe_name+smiles_mean24,cell_id,MCF10A,168,14,0.0367,0.2232,0.4730
+probe_name+smiles_mean24,cell_id,MCF7,1799,263,0.0398,0.1958,0.4645
+probe_name+smiles_mean24,cell_id,MDAMB231,167,14,0.0406,0.2355,0.4190
+probe_name+smiles_mean24,cell_id,MNEU.E,36,6,0.0643,0.2113,0.4167
+probe_name+smiles_mean24,cell_id,NEU,168,28,0.0178,0.2514,0.4766
+probe_name+smiles_mean24,cell_id,NPC,179,30,-0.0173,0.2073,0.5419
+probe_name+smiles_mean24,cell_id,NPC.CAS9,167,28,-0.0197,0.2095,0.5297
+probe_name+smiles_mean24,cell_id,NPC.TAK,185,32,-0.0126,0.2107,0.5373
+probe_name+smiles_mean24,cell_id,PC3,1713,263,0.0333,0.1779,0.4744
+probe_name+smiles_mean24,cell_id,SKBR3,168,14,0.0539,0.2174,0.4473
+probe_name+smiles_mean24,cell_id,SKL,168,28,0.0046,0.2129,0.4903
+probe_name+smiles_mean24,cell_id,SKL.C,168,28,-0.0039,0.2256,0.5139
+probe_name+smiles_mean24,cell_id,YAPC,1445,238,0.0313,0.1945,0.4733
+probe_name+smiles_mean24,time_h,3.0,564,14,0.0420,0.2324,0.4242
+probe_name+smiles_mean24,time_h,6.0,113,10,0.0081,0.0832,0.4481
+probe_name+smiles_mean24,time_h,24.0,14554,260,0.0399,0.1937,0.4685
+probe_name+smiles_mean24,dose_bin,0.04,2522,260,-0.0004,0.1943,0.5003
+probe_name+smiles_mean24,dose_bin,0.12,2530,261,0.0072,0.1912,0.4990
+probe_name+smiles_mean24,dose_bin,0.37,2522,260,0.0238,0.1947,0.4803
+probe_name+smiles_mean24,dose_bin,1.11,2529,260,0.0339,0.1811,0.4746
+probe_name+smiles_mean24,dose_bin,3.33,2593,263,0.0494,0.1826,0.4526
+probe_name+smiles_mean24,dose_bin,10.0,2529,260,0.1224,0.2171,0.4063
+probe_name+smiles_mean24,dose_bin,20.0,6,1,0.0000,0.1516,
+probe_name+smiles_mean24,is_named,True,15231,264,0.0390,0.1915,0.4690
+probe_name+smiles_mean24,active,False,13290,263,0.0351,0.1773,0.4758
+probe_name+smiles_mean24,active,True,1941,213,0.0303,0.3097,0.4538
+probe_name+smiles_mean24,tani_bin,"(-0.001, 0.3]",4292,75,0.0208,0.1795,0.4919
+probe_name+smiles_mean24,tani_bin,"(0.3, 0.4]",4958,83,0.0337,0.1853,0.4760
+probe_name+smiles_mean24,tani_bin,"(0.4, 0.5]",2441,48,0.0613,0.2109,0.4408
+probe_name+smiles_mean24,tani_bin,"(0.5, 0.7]",2790,46,0.0538,0.1992,0.4447
+probe_name+smiles_mean24,tani_bin,"(0.7, 1.0]",750,12,0.0437,0.2025,0.4837
+probe_name_mean24,cell_id,A375,1722,264,0.0678,0.1746,0.4439
+probe_name_mean24,cell_id,A549,269,46,0.0502,0.2188,0.4473
+probe_name_mean24,cell_id,ASC,168,28,-0.0306,0.1665,0.5470
+probe_name_mean24,cell_id,ASC.C,168,28,0.0210,0.2148,0.4341
+probe_name_mean24,cell_id,BT20,168,14,0.0400,0.2055,0.4771
+probe_name_mean24,cell_id,CD34,168,28,0.0201,0.2333,0.4903
+probe_name_mean24,cell_id,HA1E,1695,260,0.0435,0.1711,0.4531
+probe_name_mean24,cell_id,HCC515,252,42,0.0442,0.1821,0.4288
+probe_name_mean24,cell_id,HELA,1445,238,0.0249,0.1836,0.4744
+probe_name_mean24,cell_id,HEPG2,252,42,0.0032,0.1870,0.4906
+probe_name_mean24,cell_id,HME1,228,33,0.0483,0.2268,0.4365
+probe_name_mean24,cell_id,HS578T,168,14,0.0559,0.2047,0.4437
+probe_name_mean24,cell_id,HT29,1697,260,0.0418,0.1861,0.4682
+probe_name_mean24,cell_id,HUES3,36,6,0.0393,0.1565,0.3889
+probe_name_mean24,cell_id,HUVEC,168,28,0.0619,0.2653,0.4220
+probe_name_mean24,cell_id,JURKAT,36,6,-0.0203,0.2103,0.5389
+probe_name_mean24,cell_id,LNCAP,60,5,0.0760,0.2325,0.4375
+probe_name_mean24,cell_id,MCF10A,168,14,0.0093,0.2020,0.4940
+probe_name_mean24,cell_id,MCF7,1799,263,0.0380,0.1843,0.4693
+probe_name_mean24,cell_id,MDAMB231,167,14,0.0373,0.2157,0.4741
+probe_name_mean24,cell_id,MNEU.E,36,6,0.0411,0.2605,0.4278
+probe_name_mean24,cell_id,NEU,168,28,0.0002,0.2597,0.5004
+probe_name_mean24,cell_id,NPC,179,30,0.0213,0.2504,0.4659
+probe_name_mean24,cell_id,NPC.CAS9,167,28,0.0308,0.2538,0.4496
+probe_name_mean24,cell_id,NPC.TAK,185,32,0.0027,0.2345,0.5191
+probe_name_mean24,cell_id,PC3,1713,263,0.0282,0.1716,0.4723
+probe_name_mean24,cell_id,SKBR3,168,14,0.0203,0.1955,0.5050
+probe_name_mean24,cell_id,SKL,168,28,0.0010,0.2234,0.5053
+probe_name_mean24,cell_id,SKL.C,168,28,0.0041,0.2474,0.5082
+probe_name_mean24,cell_id,YAPC,1445,238,0.0353,0.1882,0.4574
+probe_name_mean24,time_h,3.0,564,14,0.0345,0.2056,0.4835
+probe_name_mean24,time_h,6.0,113,10,0.0197,0.0824,0.4174
+probe_name_mean24,time_h,24.0,14554,260,0.0385,0.1862,0.4645
+probe_name_mean24,dose_bin,0.04,2522,260,0.0088,0.1924,0.4866
+probe_name_mean24,dose_bin,0.12,2530,261,0.0158,0.1857,0.4785
+probe_name_mean24,dose_bin,0.37,2522,260,0.0256,0.1862,0.4711
+probe_name_mean24,dose_bin,1.11,2529,260,0.0426,0.1753,0.4616
+probe_name_mean24,dose_bin,3.33,2593,263,0.0553,0.1771,0.4535
+probe_name_mean24,dose_bin,10.0,2529,260,0.0809,0.1981,0.4408
+probe_name_mean24,dose_bin,20.0,6,1,0.0000,0.1142,
+probe_name_mean24,is_named,True,15231,264,0.0379,0.1838,0.4654
+probe_name_mean24,active,False,13290,263,0.0357,0.1719,0.4720
+probe_name_mean24,active,True,1941,213,0.0175,0.2929,0.4457
+probe_name_mean24,tani_bin,"(-0.001, 0.3]",4292,75,0.0196,0.1790,0.4843
+probe_name_mean24,tani_bin,"(0.3, 0.4]",4958,83,0.0407,0.1780,0.4692
+probe_name_mean24,tani_bin,"(0.4, 0.5]",2441,48,0.0497,0.1975,0.4424
+probe_name_mean24,tani_bin,"(0.5, 0.7]",2790,46,0.0448,0.1827,0.4618
+probe_name_mean24,tani_bin,"(0.7, 1.0]",750,12,0.0584,0.2036,0.4275
+probe_smiles_mean24,cell_id,A375,1722,264,0.0518,0.1858,0.4425
+probe_smiles_mean24,cell_id,A549,269,46,0.0229,0.2197,0.4923
+probe_smiles_mean24,cell_id,ASC,168,28,0.0197,0.1803,0.4780
+probe_smiles_mean24,cell_id,ASC.C,168,28,-0.0106,0.1968,0.5029
+probe_smiles_mean24,cell_id,BT20,168,14,0.0876,0.2598,0.4002
+probe_smiles_mean24,cell_id,CD34,168,28,-0.0090,0.2127,0.5071
+probe_smiles_mean24,cell_id,HA1E,1695,260,0.0343,0.1789,0.4498
+probe_smiles_mean24,cell_id,HCC515,252,42,0.0179,0.1846,0.4814
+probe_smiles_mean24,cell_id,HELA,1445,238,0.0403,0.2005,0.4525
+probe_smiles_mean24,cell_id,HEPG2,252,42,0.0721,0.2268,0.4172
+probe_smiles_mean24,cell_id,HME1,228,33,-0.0054,0.2115,0.5094
+probe_smiles_mean24,cell_id,HS578T,168,14,0.0673,0.2178,0.4208
+probe_smiles_mean24,cell_id,HT29,1697,260,0.0305,0.2005,0.4654
+probe_smiles_mean24,cell_id,HUES3,36,6,0.0332,0.1507,0.4222
+probe_smiles_mean24,cell_id,HUVEC,168,28,0.0002,0.2354,0.4932
+probe_smiles_mean24,cell_id,JURKAT,36,6,0.0145,0.1675,0.4833
+probe_smiles_mean24,cell_id,LNCAP,60,5,0.0566,0.2464,0.4083
+probe_smiles_mean24,cell_id,MCF10A,168,14,0.0602,0.2447,0.4721
+probe_smiles_mean24,cell_id,MCF7,1799,263,0.0282,0.1944,0.4771
+probe_smiles_mean24,cell_id,MDAMB231,167,14,0.0437,0.2486,0.4515
+probe_smiles_mean24,cell_id,MNEU.E,36,6,0.0577,0.2264,0.3889
+probe_smiles_mean24,cell_id,NEU,168,28,-0.0185,0.2413,0.5362
+probe_smiles_mean24,cell_id,NPC,179,30,-0.0065,0.2183,0.5149
+probe_smiles_mean24,cell_id,NPC.CAS9,167,28,0.0023,0.2182,0.5193
+probe_smiles_mean24,cell_id,NPC.TAK,185,32,0.0064,0.2201,0.5050
+probe_smiles_mean24,cell_id,PC3,1713,263,0.0336,0.1830,0.4549
+probe_smiles_mean24,cell_id,SKBR3,168,14,0.0232,0.2089,0.4611
+probe_smiles_mean24,cell_id,SKL,168,28,0.0067,0.2115,0.5031
+probe_smiles_mean24,cell_id,SKL.C,168,28,-0.0186,0.2290,0.5172
+probe_smiles_mean24,cell_id,YAPC,1445,238,0.0264,0.1972,0.4679
+probe_smiles_mean24,time_h,3.0,564,14,0.0535,0.2412,0.4165
+probe_smiles_mean24,time_h,6.0,113,10,0.0020,0.0748,0.5196
+probe_smiles_mean24,time_h,24.0,14554,260,0.0348,0.1971,0.4594
+probe_smiles_mean24,dose_bin,0.04,2522,260,0.0092,0.2024,0.4786
+probe_smiles_mean24,dose_bin,0.12,2530,261,0.0131,0.1971,0.4772
+probe_smiles_mean24,dose_bin,0.37,2522,260,0.0228,0.1995,0.4660
+probe_smiles_mean24,dose_bin,1.11,2529,260,0.0252,0.1844,0.4626
+probe_smiles_mean24,dose_bin,3.33,2593,263,0.0363,0.1840,0.4558
+probe_smiles_mean24,dose_bin,10.0,2529,260,0.1017,0.2146,0.4164
+probe_smiles_mean24,dose_bin,20.0,6,1,0.0000,0.0803,
+probe_smiles_mean24,is_named,True,15231,264,0.0344,0.1948,0.4608
+probe_smiles_mean24,active,False,13290,263,0.0319,0.1835,0.4614
+probe_smiles_mean24,active,True,1941,213,0.0364,0.2993,0.4428
+probe_smiles_mean24,tani_bin,"(-0.001, 0.3]",4292,75,0.0119,0.1818,0.4882
+probe_smiles_mean24,tani_bin,"(0.3, 0.4]",4958,83,0.0273,0.1898,0.4699
+probe_smiles_mean24,tani_bin,"(0.4, 0.5]",2441,48,0.0578,0.2133,0.4351
+probe_smiles_mean24,tani_bin,"(0.5, 0.7]",2790,46,0.0501,0.2012,0.4381
+probe_smiles_mean24,tani_bin,"(0.7, 1.0]",750,12,0.0694,0.2118,0.4182
+qwen_full,cell_id,A375,1722,264,0.0718,0.1882,0.4598
+qwen_full,cell_id,A549,269,46,0.0468,0.2224,0.4807
+qwen_full,cell_id,ASC,168,28,0.0096,0.1801,0.4656
+qwen_full,cell_id,ASC.C,168,28,0.0181,0.2231,0.4572
+qwen_full,cell_id,BT20,168,14,0.0563,0.2313,0.4130
+qwen_full,cell_id,CD34,168,28,0.0207,0.2432,0.4599
+qwen_full,cell_id,HA1E,1695,260,0.0351,0.1820,0.4668
+qwen_full,cell_id,HCC515,252,42,0.0473,0.1836,0.4721
+qwen_full,cell_id,HELA,1445,238,0.0205,0.1982,0.4868
+qwen_full,cell_id,HEPG2,252,42,0.0731,0.2201,0.4514
+qwen_full,cell_id,HME1,228,33,0.0079,0.2174,0.4982
+qwen_full,cell_id,HS578T,168,14,0.0343,0.1951,0.4684
+qwen_full,cell_id,HT29,1697,260,0.0565,0.2087,0.4674
+qwen_full,cell_id,HUES3,36,6,0.0924,0.1621,0.3889
+qwen_full,cell_id,HUVEC,168,28,0.0458,0.2624,0.4478
+qwen_full,cell_id,JURKAT,36,6,-0.0066,0.1953,0.5444
+qwen_full,cell_id,LNCAP,60,5,0.0863,0.2436,0.3417
+qwen_full,cell_id,MCF10A,168,14,0.0622,0.2193,0.4473
+qwen_full,cell_id,MCF7,1799,263,0.0484,0.2051,0.4603
+qwen_full,cell_id,MDAMB231,167,14,0.0571,0.2355,0.4176
+qwen_full,cell_id,MNEU.E,36,6,0.0452,0.2404,0.4333
+qwen_full,cell_id,NEU,168,28,-0.0166,0.2557,0.4960
+qwen_full,cell_id,NPC,179,30,0.0017,0.2496,0.5069
+qwen_full,cell_id,NPC.CAS9,167,28,-0.0054,0.2494,0.4968
+qwen_full,cell_id,NPC.TAK,185,32,0.0051,0.2484,0.4989
+qwen_full,cell_id,PC3,1713,263,0.0426,0.1927,0.4685
+qwen_full,cell_id,SKBR3,168,14,0.0859,0.2128,0.3947
+qwen_full,cell_id,SKL,168,28,0.0083,0.2308,0.4777
+qwen_full,cell_id,SKL.C,168,28,0.0054,0.2506,0.4627
+qwen_full,cell_id,YAPC,1445,238,0.0347,0.2077,0.4608
+qwen_full,time_h,3.0,564,14,0.0388,0.2264,0.4030
+qwen_full,time_h,6.0,113,10,-0.0019,0.0853,0.4770
+qwen_full,time_h,24.0,14554,260,0.0451,0.2025,0.4666
+qwen_full,dose_bin,0.04,2522,260,0.0177,0.2056,0.4802
+qwen_full,dose_bin,0.12,2530,261,0.0267,0.2024,0.4755
+qwen_full,dose_bin,0.37,2522,260,0.0301,0.2034,0.4809
+qwen_full,dose_bin,1.11,2529,260,0.0481,0.1932,0.4619
+qwen_full,dose_bin,3.33,2593,263,0.0550,0.1920,0.4579
+qwen_full,dose_bin,10.0,2529,260,0.0909,0.2164,0.4388
+qwen_full,dose_bin,20.0,6,1,0.0000,0.1401,
+qwen_full,is_named,True,15231,264,0.0440,0.1999,0.4680
+qwen_full,active,False,13290,263,0.0429,0.1841,0.4809
+qwen_full,active,True,1941,213,-0.0200,0.3287,0.4557
+qwen_full,tani_bin,"(-0.001, 0.3]",4292,75,0.0182,0.1971,0.5167
+qwen_full,tani_bin,"(0.3, 0.4]",4958,83,0.0589,0.2001,0.4408
+qwen_full,tani_bin,"(0.4, 0.5]",2441,48,0.0398,0.2020,0.4744
+qwen_full,tani_bin,"(0.5, 0.7]",2790,46,0.0612,0.2010,0.4374
+qwen_full,tani_bin,"(0.7, 1.0]",750,12,0.0522,0.2023,0.4405
+ridge_fp,cell_id,A375,1722,264,0.0580,0.1926,0.4269
+ridge_fp,cell_id,A549,269,46,0.0453,0.2247,0.4227
+ridge_fp,cell_id,ASC,168,28,0.0237,0.1795,0.4462
+ridge_fp,cell_id,ASC.C,168,28,0.0185,0.2151,0.4319
+ridge_fp,cell_id,BT20,168,14,0.1014,0.2507,0.3695
+ridge_fp,cell_id,CD34,168,28,0.0081,0.2334,0.4557
+ridge_fp,cell_id,HA1E,1695,260,0.0376,0.1850,0.4469
+ridge_fp,cell_id,HCC515,252,42,0.0430,0.1874,0.4631
+ridge_fp,cell_id,HELA,1445,238,0.0396,0.2044,0.4389
+ridge_fp,cell_id,HEPG2,252,42,0.0480,0.2140,0.4130
+ridge_fp,cell_id,HME1,228,33,0.0257,0.2175,0.4519
+ridge_fp,cell_id,HS578T,168,14,0.1102,0.2295,0.3727
+ridge_fp,cell_id,HT29,1697,260,0.0376,0.2059,0.4555
+ridge_fp,cell_id,HUES3,36,6,0.0233,0.1405,0.5500
+ridge_fp,cell_id,HUVEC,168,28,0.0093,0.2527,0.4852
+ridge_fp,cell_id,JURKAT,36,6,-0.0055,0.1905,0.4944
+ridge_fp,cell_id,LNCAP,60,5,0.1328,0.2603,0.2792
+ridge_fp,cell_id,MCF10A,168,14,0.1347,0.2550,0.3301
+ridge_fp,cell_id,MCF7,1799,263,0.0446,0.2061,0.4296
+ridge_fp,cell_id,MDAMB231,167,14,0.1164,0.2692,0.3328
+ridge_fp,cell_id,MNEU.E,36,6,0.0183,0.2213,0.4722
+ridge_fp,cell_id,NEU,168,28,-0.0110,0.2518,0.5161
+ridge_fp,cell_id,NPC,179,30,-0.0134,0.2480,0.5347
+ridge_fp,cell_id,NPC.CAS9,167,28,-0.0150,0.2455,0.5322
+ridge_fp,cell_id,NPC.TAK,185,32,0.0136,0.2483,0.4718
+ridge_fp,cell_id,PC3,1713,263,0.0350,0.1884,0.4420
+ridge_fp,cell_id,SKBR3,168,14,0.1283,0.2348,0.3091
+ridge_fp,cell_id,SKL,168,28,0.0266,0.2281,0.4277
+ridge_fp,cell_id,SKL.C,168,28,0.0149,0.2463,0.4638
+ridge_fp,cell_id,YAPC,1445,238,0.0344,0.2068,0.4443
+ridge_fp,time_h,3.0,564,14,0.0866,0.2545,0.3566
+ridge_fp,time_h,6.0,113,10,0.0087,0.0944,0.4252
+ridge_fp,time_h,24.0,14554,260,0.0422,0.2039,0.4387
+ridge_fp,dose_bin,0.04,2522,260,0.0204,0.2032,0.4667
+ridge_fp,dose_bin,0.12,2530,261,0.0278,0.2011,0.4579
+ridge_fp,dose_bin,0.37,2522,260,0.0354,0.2038,0.4509
+ridge_fp,dose_bin,1.11,2529,260,0.0406,0.1943,0.4409
+ridge_fp,dose_bin,3.33,2593,263,0.0509,0.1963,0.4241
+ridge_fp,dose_bin,10.0,2529,260,0.0751,0.2229,0.3938
+ridge_fp,dose_bin,20.0,6,1,-0.0091,0.1430,
+ridge_fp,is_named,True,15231,264,0.0413,0.2013,0.4405
+ridge_fp,active,False,13290,263,0.0312,0.1840,0.4488
+ridge_fp,active,True,1941,213,0.0452,0.3403,0.4246
+ridge_fp,tani_bin,"(-0.001, 0.3]",4292,75,0.0296,0.2005,0.4706
+ridge_fp,tani_bin,"(0.3, 0.4]",4958,83,0.0389,0.1945,0.4394
+ridge_fp,tani_bin,"(0.4, 0.5]",2441,48,0.0584,0.2178,0.3988
+ridge_fp,tani_bin,"(0.5, 0.7]",2790,46,0.0453,0.1977,0.4332
+ridge_fp,tani_bin,"(0.7, 1.0]",750,12,0.0463,0.2010,0.4536
+zero,cell_id,A375,1722,264,0.0000,0.0000,0.5000
+zero,cell_id,A549,269,46,0.0000,0.0000,0.5000
+zero,cell_id,ASC,168,28,0.0000,0.0000,0.5000
+zero,cell_id,ASC.C,168,28,0.0000,0.0000,0.5000
+zero,cell_id,BT20,168,14,0.0000,0.0000,0.5000
+zero,cell_id,CD34,168,28,0.0000,0.0000,0.5000
+zero,cell_id,HA1E,1695,260,0.0000,0.0000,0.5000
+zero,cell_id,HCC515,252,42,0.0000,0.0000,0.5000
+zero,cell_id,HELA,1445,238,0.0000,0.0000,0.5000
+zero,cell_id,HEPG2,252,42,0.0000,0.0000,0.5000
+zero,cell_id,HME1,228,33,0.0000,0.0000,0.5000
+zero,cell_id,HS578T,168,14,0.0000,0.0000,0.5000
+zero,cell_id,HT29,1697,260,0.0000,0.0000,0.5000
+zero,cell_id,HUES3,36,6,0.0000,0.0000,0.5000
+zero,cell_id,HUVEC,168,28,0.0000,0.0000,0.5000
+zero,cell_id,JURKAT,36,6,0.0000,0.0000,0.5000
+zero,cell_id,LNCAP,60,5,0.0000,0.0000,0.5000
+zero,cell_id,MCF10A,168,14,0.0000,0.0000,0.5000
+zero,cell_id,MCF7,1799,263,0.0000,0.0000,0.5000
+zero,cell_id,MDAMB231,167,14,0.0000,0.0000,0.5000
+zero,cell_id,MNEU.E,36,6,0.0000,0.0000,0.5000
+zero,cell_id,NEU,168,28,0.0000,0.0000,0.5000
+zero,cell_id,NPC,179,30,0.0000,0.0000,0.5000
+zero,cell_id,NPC.CAS9,167,28,0.0000,0.0000,0.5000
+zero,cell_id,NPC.TAK,185,32,0.0000,0.0000,0.5000
+zero,cell_id,PC3,1713,263,0.0000,0.0000,0.5000
+zero,cell_id,SKBR3,168,14,0.0000,0.0000,0.5000
+zero,cell_id,SKL,168,28,0.0000,0.0000,0.5000
+zero,cell_id,SKL.C,168,28,0.0000,0.0000,0.5000
+zero,cell_id,YAPC,1445,238,0.0000,0.0000,0.5000
+zero,time_h,3.0,564,14,0.0000,0.0000,0.5000
+zero,time_h,6.0,113,10,0.0000,0.0000,0.5000
+zero,time_h,24.0,14554,260,0.0000,0.0000,0.5000
+zero,dose_bin,0.04,2522,260,0.0000,0.0000,0.5000
+zero,dose_bin,0.12,2530,261,0.0000,0.0000,0.5000
+zero,dose_bin,0.37,2522,260,0.0000,0.0000,0.5000
+zero,dose_bin,1.11,2529,260,0.0000,0.0000,0.5000
+zero,dose_bin,3.33,2593,263,0.0000,0.0000,0.5000
+zero,dose_bin,10.0,2529,260,0.0000,0.0000,0.5000
+zero,dose_bin,20.0,6,1,0.0000,0.0000,
+zero,is_named,True,15231,264,0.0000,0.0000,0.5000
+zero,active,False,13290,263,0.0000,0.0000,0.5000
+zero,active,True,1941,213,0.0000,0.0000,0.5000
+zero,tani_bin,"(-0.001, 0.3]",4292,75,0.0000,0.0000,0.5000
+zero,tani_bin,"(0.3, 0.4]",4958,83,0.0000,0.0000,0.5000
+zero,tani_bin,"(0.4, 0.5]",2441,48,0.0000,0.0000,0.5000
+zero,tani_bin,"(0.5, 0.7]",2790,46,0.0000,0.0000,0.5000
+zero,tani_bin,"(0.7, 1.0]",750,12,0.0000,0.0000,0.5000
