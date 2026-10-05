@@ -1,0 +1,13 @@
+data/
+.submit-token
+.venv/
+__pycache__/
+*.pyc
+.cache/
+checkpoints/
+*.safetensors
+*.pt
+*.npy
+*.npz
+.ipynb_checkpoints/
+.claude/settings.local.json

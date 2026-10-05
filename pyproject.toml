@@ -1,0 +1,36 @@
+[project]
+name = "pertpred"
+version = "0.1.0"
+description = "Perturbation-response prediction on LINCS L1000 Phase II with Qwen2.5-0.5B"
+authors = [
+    { name = "yaemsi", email = "248148252+yaemsi@users.noreply.github.com" }
+]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "accelerate>=1.15.0",
+    "h5py>=3.16.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
+    "pandas>=3.0.6",
+    "peft>=0.13",
+    "pyarrow>=25.0.1",
+    "rdkit>=2026.3.6",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+    "tabulate>=0.10.0",
+    "torch>=2.7",
+    "tqdm>=4.70.1",
+    "transformers>=4.45,<5",
+]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
