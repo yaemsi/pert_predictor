@@ -194,3 +194,10 @@ confounded.
   changed any conclusion, and the pair doubles as a run-to-run noise estimate for the LLM. With the
   complete run, the name's contribution to retrieval moved from n.s. to borderline
   (-0.022 [-0.044, -0.000]); the writeup reports it as borderline.
+- While building the data-tour notebook, found that the compound grouping (D2) misses salt /
+  prodrug forms with different InChIKey skeletons: dexamethasone / -acetate (both train),
+  estramustine / -phosphate (train / val), ixazomib / -citrate (val / test). None links train to
+  test, so test scores are not leaked; val-based selection saw one near-duplicate of a test
+  compound. Not worth ~5 GPU-hours of reruns; a name-stem rule should be added to the grouping.
+- Cache moved to `data/pre-processed/` (the workspace's own slot for derived data; `submit` skips
+  `data/`). Level 3 decompressed there too (17 GB) for the notebook's raw-vs-differential section.

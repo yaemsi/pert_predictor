@@ -40,10 +40,11 @@ Paths are environment variables so the same code runs locally and under Slurm:
 | variable | default | holds |
 |---|---|---|
 | `PERTPRED_DATA` | `./data/raw` | the raw GEO files (read-only) |
-| `PERTPRED_CACHE` | `~/.cache/pert_predictor` | decompressed gctx (5.8 GB), matrices, predictions, checkpoints |
+| `PERTPRED_CACHE` | `./data/pre-processed` | decompressed gctx (Level 5: 5.8 GB; Level 3: 17 GB, notebook only), matrices, predictions, checkpoints |
 | `PERTPRED_RESULTS` | `./results` | small outputs that belong in the submission |
 
-The cache deliberately lives outside the workspace so `submit` never packages weights or matrices.
+The cache lives under `data/`, which `submit` does not package, so weights and matrices never reach the submission.
+If `data/` is read-only on the cluster, point `PERTPRED_CACHE` at a writable path (e.g. `/scratch/slurm/...` or `$HOME`).
 
 ## Reproduce
 
@@ -84,6 +85,13 @@ A pooled hidden state feeds a linear head that predicts the 978-gene residual ov
 of the same cell x time x dose context. LoRA (r=16) on every linear layer of the backbone; the head
 is zero-initialized so training starts exactly at the context-mean baseline. Weights are not part of
 the submission.
+
+## Data tour
+
+[`notebooks/01_data_tour.ipynb`](notebooks/01_data_tour.ipynb) walks through every raw file, how
+they link, and what the measurements look like, with plots (saved in the notebook). Re-run with
+`uv run jupyter nbconvert --to notebook --execute --inplace notebooks/01_data_tour.ipynb`; section 9
+needs Level 3 decompressed into `data/pre-processed/level3.gctx` and is skipped otherwise.
 
 ## Code map
 

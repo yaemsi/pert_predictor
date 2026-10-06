@@ -7,20 +7,23 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # Raw GEO files (read-only in the remote workspace).
 DATA_DIR = Path(os.environ.get("PERTPRED_DATA", REPO_ROOT / "data" / "raw"))
-# Large derived files (decompressed gctx, matrices, predictions, checkpoints). Kept OUTSIDE the
-# workspace so `submit` never packages them. On Slurm point this at /scratch or $HOME.
-CACHE_DIR = Path(os.environ.get("PERTPRED_CACHE", Path.home() / ".cache" / "pert_predictor"))
+# Large derived files (decompressed gctx, matrices, predictions, checkpoints). Lives under data/,
+# which `submit` does not package, so weights and matrices never end up in the submission.
+CACHE_DIR = Path(os.environ.get("PERTPRED_CACHE", REPO_ROOT / "data" / "pre-processed"))
 # Small, reviewable outputs (metrics, tables, plots, logs) that ARE part of the submission.
 RESULTS_DIR = Path(os.environ.get("PERTPRED_RESULTS", REPO_ROOT / "results"))
 
 PREFIX = "GSE70138_Broad_LINCS_"
 LEVEL5_GZ = DATA_DIR / f"{PREFIX}Level5_COMPZ_n118050x12328_2017-03-06.gctx.gz"
+LEVEL3_GZ = DATA_DIR / f"{PREFIX}Level3_INF_mlr12k_n345976x12328_2017-03-06.gctx.gz"
+INST_INFO = DATA_DIR / f"{PREFIX}inst_info_2017-03-06.txt.gz"
 SIG_INFO = DATA_DIR / f"{PREFIX}sig_info_2017-03-06.txt.gz"
 PERT_INFO = DATA_DIR / f"{PREFIX}pert_info_2017-03-06.txt.gz"
 GENE_INFO = DATA_DIR / f"{PREFIX}gene_info_2017-03-06.txt.gz"
 CELL_INFO = DATA_DIR / f"{PREFIX}cell_info_2017-04-28.txt.gz"
 
 LEVEL5_GCTX = CACHE_DIR / "level5.gctx"
+LEVEL3_GCTX = CACHE_DIR / "level3.gctx"  # only needed by the data-tour notebook (17 GB decompressed)
 Y_PATH = CACHE_DIR / "landmark_z.npy"  # (n_sigs, 978) float32, rows aligned with SIGS_PATH
 SIGS_PATH = CACHE_DIR / "sigs.parquet"
 GENES_PATH = CACHE_DIR / "landmark_genes.parquet"

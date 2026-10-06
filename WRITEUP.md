@@ -51,7 +51,12 @@ Pitfalls found, in the order they changed the plan:
    about the compound, already scores Pearson 0.20 on held-out compounds — at the replicate ceiling.
    A model can look state-of-the-art on this metric without using the compound at all.
 
-5. **The obvious fix is also broken.** Correlating residuals from the context mean (`delta_pearson`)
+5. **Grouping by structure misses salts and prodrugs.** Three drugs appear under two names with
+   different InChIKey skeletons (e.g. ixazomib / ixazomib citrate). None crosses train/test, so test
+   scores are clean, but it is a residual risk of any structure-only grouping
+   (`notebooks/01_data_tour.ipynb`, section 14).
+
+6. **The obvious fix is also broken.** Correlating residuals from the context mean (`delta_pearson`)
    gives an all-zeros predictor 0.069 — better than Tanimoto kNN and ridge on fingerprints. The
    context mean is pulled by a minority of strongly active training compounds; the typical held-out
    compound is inert, so (observed - mean) points along -mean and "predict nothing" correlates with it.
