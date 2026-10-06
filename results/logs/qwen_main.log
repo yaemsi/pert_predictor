@@ -1,0 +1,179 @@
+example prompt (qwen_main):
+cell line: A375 (skin)
+time: 24 h
+dose: 10 uM
+compound: oxaprozin
+smiles: OC(=O)CCc1nc(c(o1)-c1ccccc1)-c1ccccc1
+---
+prompt tokens: median=74 max=220
+trainable parameters: 9.68M
+step 50/7140 epoch 0 loss 1.4477 (154 rows/s)
+step 100/7140 epoch 0 loss 1.5758 (169 rows/s)
+step 150/7140 epoch 0 loss 1.2555 (171 rows/s)
+step 200/7140 epoch 0 loss 2.2168 (174 rows/s)
+step 250/7140 epoch 0 loss 1.4873 (178 rows/s)
+  [val] step 297 centered_pearson=0.0356 mse=1.5888
+step 300/7140 epoch 0 loss 1.5401 (141 rows/s)
+step 350/7140 epoch 0 loss 1.5091 (145 rows/s)
+step 400/7140 epoch 0 loss 1.5384 (150 rows/s)
+step 450/7140 epoch 0 loss 2.0331 (153 rows/s)
+step 500/7140 epoch 0 loss 1.5967 (156 rows/s)
+step 550/7140 epoch 0 loss 1.5471 (158 rows/s)
+  [val] step 594 centered_pearson=0.0407 mse=1.5905
+step 600/7140 epoch 0 loss 2.0943 (142 rows/s)
+step 650/7140 epoch 0 loss 1.3304 (144 rows/s)
+step 700/7140 epoch 0 loss 1.4877 (146 rows/s)
+step 750/7140 epoch 0 loss 2.4475 (149 rows/s)
+step 800/7140 epoch 0 loss 1.2548 (150 rows/s)
+step 850/7140 epoch 0 loss 1.6016 (151 rows/s)
+  [val] step 891 centered_pearson=0.0504 mse=1.5885
+step 900/7140 epoch 0 loss 1.3591 (141 rows/s)
+step 950/7140 epoch 0 loss 1.2472 (144 rows/s)
+step 1000/7140 epoch 0 loss 1.2989 (146 rows/s)
+step 1050/7140 epoch 0 loss 1.3094 (148 rows/s)
+step 1100/7140 epoch 0 loss 1.8071 (150 rows/s)
+step 1150/7140 epoch 0 loss 1.6775 (151 rows/s)
+  [val] step 1188 centered_pearson=0.0395 mse=1.5771
+step 1200/7140 epoch 1 loss 1.3970 (145 rows/s)
+step 1250/7140 epoch 1 loss 1.2543 (147 rows/s)
+step 1300/7140 epoch 1 loss 1.7527 (148 rows/s)
+step 1350/7140 epoch 1 loss 1.3225 (150 rows/s)
+step 1400/7140 epoch 1 loss 1.3825 (151 rows/s)
+step 1450/7140 epoch 1 loss 1.3025 (152 rows/s)
+  [val] step 1485 centered_pearson=0.0484 mse=1.5905
+step 1500/7140 epoch 1 loss 1.1274 (147 rows/s)
+step 1550/7140 epoch 1 loss 1.1328 (149 rows/s)
+step 1600/7140 epoch 1 loss 1.4434 (150 rows/s)
+step 1650/7140 epoch 1 loss 1.4629 (151 rows/s)
+step 1700/7140 epoch 1 loss 1.1120 (152 rows/s)
+step 1750/7140 epoch 1 loss 1.8286 (153 rows/s)
+  [val] step 1782 centered_pearson=0.0451 mse=1.5817
+step 1800/7140 epoch 1 loss 1.1486 (149 rows/s)
+step 1850/7140 epoch 1 loss 1.4036 (151 rows/s)
+step 1900/7140 epoch 1 loss 1.7324 (152 rows/s)
+step 1950/7140 epoch 1 loss 1.2456 (153 rows/s)
+step 2000/7140 epoch 1 loss 1.1414 (154 rows/s)
+step 2050/7140 epoch 1 loss 1.3221 (155 rows/s)
+  [val] step 2079 centered_pearson=0.0502 mse=1.5889
+step 2100/7140 epoch 1 loss 2.1237 (151 rows/s)
+step 2150/7140 epoch 1 loss 1.1985 (152 rows/s)
+step 2200/7140 epoch 1 loss 1.2706 (153 rows/s)
+step 2250/7140 epoch 1 loss 1.8946 (154 rows/s)
+step 2300/7140 epoch 1 loss 1.2016 (155 rows/s)
+step 2350/7140 epoch 1 loss 1.5311 (156 rows/s)
+  [val] step 2376 centered_pearson=0.0505 mse=1.5750
+step 2400/7140 epoch 2 loss 1.1978 (153 rows/s)
+step 2450/7140 epoch 2 loss 1.1025 (154 rows/s)
+step 2500/7140 epoch 2 loss 1.2067 (154 rows/s)
+step 2550/7140 epoch 2 loss 1.2958 (155 rows/s)
+step 2600/7140 epoch 2 loss 1.4113 (156 rows/s)
+step 2650/7140 epoch 2 loss 1.3467 (157 rows/s)
+  [val] step 2673 centered_pearson=0.0484 mse=1.5922
+step 2700/7140 epoch 2 loss 1.3326 (154 rows/s)
+step 2750/7140 epoch 2 loss 1.0025 (154 rows/s)
+step 2800/7140 epoch 2 loss 1.3052 (155 rows/s)
+step 2850/7140 epoch 2 loss 2.0614 (156 rows/s)
+step 2900/7140 epoch 2 loss 1.1944 (156 rows/s)
+step 2950/7140 epoch 2 loss 1.1713 (157 rows/s)
+  [val] step 2970 centered_pearson=0.0495 mse=1.5760
+step 3000/7140 epoch 2 loss 1.8892 (154 rows/s)
+step 3050/7140 epoch 2 loss 1.1484 (155 rows/s)
+step 3100/7140 epoch 2 loss 1.1274 (156 rows/s)
+step 3150/7140 epoch 2 loss 1.4513 (156 rows/s)
+step 3200/7140 epoch 2 loss 0.9832 (157 rows/s)
+step 3250/7140 epoch 2 loss 0.9896 (158 rows/s)
+  [val] step 3267 centered_pearson=0.0510 mse=1.5826
+step 3300/7140 epoch 2 loss 1.4488 (155 rows/s)
+step 3350/7140 epoch 2 loss 1.2376 (156 rows/s)
+step 3400/7140 epoch 2 loss 1.4572 (156 rows/s)
+step 3450/7140 epoch 2 loss 1.2572 (157 rows/s)
+step 3500/7140 epoch 2 loss 1.3139 (158 rows/s)
+step 3550/7140 epoch 2 loss 1.3709 (158 rows/s)
+  [val] step 3564 centered_pearson=0.0537 mse=1.5728
+step 3600/7140 epoch 3 loss 0.9594 (155 rows/s)
+step 3650/7140 epoch 3 loss 1.3181 (156 rows/s)
+step 3700/7140 epoch 3 loss 1.1045 (156 rows/s)
+step 3750/7140 epoch 3 loss 1.0010 (157 rows/s)
+step 3800/7140 epoch 3 loss 1.3791 (157 rows/s)
+step 3850/7140 epoch 3 loss 1.0577 (157 rows/s)
+  [val] step 3861 centered_pearson=0.0535 mse=1.5825
+step 3900/7140 epoch 3 loss 1.0490 (155 rows/s)
+step 3950/7140 epoch 3 loss 1.2118 (155 rows/s)
+step 4000/7140 epoch 3 loss 1.3403 (156 rows/s)
+step 4050/7140 epoch 3 loss 1.2206 (156 rows/s)
+step 4100/7140 epoch 3 loss 1.3818 (157 rows/s)
+step 4150/7140 epoch 3 loss 1.2929 (157 rows/s)
+  [val] step 4158 centered_pearson=0.0506 mse=1.5864
+step 4200/7140 epoch 3 loss 1.1425 (155 rows/s)
+step 4250/7140 epoch 3 loss 0.9059 (155 rows/s)
+step 4300/7140 epoch 3 loss 0.9279 (156 rows/s)
+step 4350/7140 epoch 3 loss 1.5673 (156 rows/s)
+step 4400/7140 epoch 3 loss 1.3061 (157 rows/s)
+step 4450/7140 epoch 3 loss 0.9995 (157 rows/s)
+  [val] step 4455 centered_pearson=0.0505 mse=1.5897
+step 4500/7140 epoch 3 loss 1.1923 (155 rows/s)
+step 4550/7140 epoch 3 loss 1.1923 (156 rows/s)
+step 4600/7140 epoch 3 loss 1.0750 (156 rows/s)
+step 4650/7140 epoch 3 loss 1.0995 (157 rows/s)
+step 4700/7140 epoch 3 loss 1.0791 (157 rows/s)
+step 4750/7140 epoch 3 loss 1.0258 (157 rows/s)
+  [val] step 4752 centered_pearson=0.0495 mse=1.5958
+step 4800/7140 epoch 4 loss 1.1039 (156 rows/s)
+step 4850/7140 epoch 4 loss 1.1010 (156 rows/s)
+step 4900/7140 epoch 4 loss 1.0621 (156 rows/s)
+step 4950/7140 epoch 4 loss 1.1284 (157 rows/s)
+step 5000/7140 epoch 4 loss 1.3011 (157 rows/s)
+  [val] step 5049 centered_pearson=0.0490 mse=1.5998
+step 5050/7140 epoch 4 loss 1.2337 (155 rows/s)
+step 5100/7140 epoch 4 loss 1.2105 (156 rows/s)
+step 5150/7140 epoch 4 loss 1.0218 (156 rows/s)
+step 5200/7140 epoch 4 loss 1.1541 (156 rows/s)
+step 5250/7140 epoch 4 loss 1.1258 (157 rows/s)
+step 5300/7140 epoch 4 loss 1.1445 (157 rows/s)
+  [val] step 5346 centered_pearson=0.0489 mse=1.5969
+step 5350/7140 epoch 4 loss 1.0106 (156 rows/s)
+step 5400/7140 epoch 4 loss 0.9870 (156 rows/s)
+step 5450/7140 epoch 4 loss 1.0761 (156 rows/s)
+step 5500/7140 epoch 4 loss 0.9573 (157 rows/s)
+step 5550/7140 epoch 4 loss 1.1119 (157 rows/s)
+step 5600/7140 epoch 4 loss 1.0054 (158 rows/s)
+  [val] step 5643 centered_pearson=0.0491 mse=1.5969
+step 5650/7140 epoch 4 loss 1.5241 (156 rows/s)
+step 5700/7140 epoch 4 loss 1.2496 (156 rows/s)
+step 5750/7140 epoch 4 loss 1.0555 (157 rows/s)
+step 5800/7140 epoch 4 loss 1.1854 (157 rows/s)
+step 5850/7140 epoch 4 loss 1.0381 (157 rows/s)
+step 5900/7140 epoch 4 loss 0.9957 (158 rows/s)
+  [val] step 5940 centered_pearson=0.0478 mse=1.6005
+step 5950/7140 epoch 4 loss 1.1793 (156 rows/s)
+step 6000/7140 epoch 5 loss 1.0017 (156 rows/s)
+step 6050/7140 epoch 5 loss 1.0807 (157 rows/s)
+step 6100/7140 epoch 5 loss 1.2561 (157 rows/s)
+step 6150/7140 epoch 5 loss 1.0733 (157 rows/s)
+step 6200/7140 epoch 5 loss 1.3286 (158 rows/s)
+  [val] step 6237 centered_pearson=0.0478 mse=1.6053
+step 6250/7140 epoch 5 loss 1.1307 (156 rows/s)
+step 6300/7140 epoch 5 loss 1.3738 (157 rows/s)
+step 6350/7140 epoch 5 loss 1.2195 (157 rows/s)
+step 6400/7140 epoch 5 loss 1.0831 (157 rows/s)
+step 6450/7140 epoch 5 loss 1.0191 (158 rows/s)
+step 6500/7140 epoch 5 loss 1.0539 (158 rows/s)
+  [val] step 6534 centered_pearson=0.0473 mse=1.6069
+step 6550/7140 epoch 5 loss 0.9618 (157 rows/s)
+step 6600/7140 epoch 5 loss 1.7750 (157 rows/s)
+step 6650/7140 epoch 5 loss 1.0685 (157 rows/s)
+step 6700/7140 epoch 5 loss 1.0525 (157 rows/s)
+step 6750/7140 epoch 5 loss 0.9908 (158 rows/s)
+step 6800/7140 epoch 5 loss 1.0313 (158 rows/s)
+  [val] step 6831 centered_pearson=0.0474 mse=1.6072
+step 6850/7140 epoch 5 loss 1.1140 (157 rows/s)
+step 6900/7140 epoch 5 loss 1.2267 (157 rows/s)
+step 6950/7140 epoch 5 loss 0.9402 (157 rows/s)
+step 7000/7140 epoch 5 loss 0.9686 (158 rows/s)
+step 7050/7140 epoch 5 loss 1.0490 (158 rows/s)
+step 7100/7140 epoch 5 loss 1.0872 (158 rows/s)
+  [val] step 7128 centered_pearson=0.0475 mse=1.6070
+  [val] step 7140 centered_pearson=0.0474 mse=1.6072
+best val centered_pearson=0.0537 at step 3564
+[qwen_main | val] pearson=0.1925  centered_pearson=0.0537  delta_pearson=0.0639  retrieval=0.4409  topk_dir=0.1526  rmse=1.1570
+[qwen_main | test] pearson=0.1866  centered_pearson=0.0448  delta_pearson=0.0585  retrieval=0.4488  topk_dir=0.1457  rmse=1.1353

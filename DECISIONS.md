@@ -106,9 +106,28 @@ training compounds is a small dataset for 500M parameters, and the weights are n
 **Would be wrong if** the frozen probe matches or beats LoRA (fine-tuning buys nothing), or if a
 generative variant beats the head on `topk_dir`.
 
-## D6. Pooling and training length for the LLM — chosen on val, from the frozen probe
+## D6. Choose the LLM's read-out with a cheap frozen probe before spending GPU on LoRA
 
-_Filled in from the probe and the long run; see dated notes._
+**Chosen.** Mean pooling over prompt tokens at the final layer, picked on val from a frozen-Qwen
+probe (4 pooling x layer combinations, each embedding fed to the *same* MLP as the fingerprint
+baseline). Main LoRA run trained 6 epochs (the 2-epoch first attempt was still improving).
+
+**Alternatives.** (a) Keep the first design (EOS token, final layer) and just train longer.
+(b) Grid-search pooling with full LoRA runs (~1 GPU-hour each).
+
+**Why.** The first LoRA run sat at zero for half an epoch and finished under the fingerprint MLP, so
+the question "is the representation the problem or the training?" had to be answered before
+committing GPU hours. The probe answers the representation half for ~10 minutes of compute, and it
+doubles as a clean ablation: frozen Qwen vs Morgan bits under an identical downstream model.
+
+**What it showed.** Every frozen-Qwen variant is *below* Morgan bits on test (`centered_pearson`
+0.035–0.040 vs 0.054; paired differences -0.014 to -0.020, CIs exclude 0). Name-only and
+SMILES-only embeddings are about equally (un)informative. Concatenating Qwen to Morgan bits gives
++0.010 [-0.002, +0.022] — not distinguishable from zero, and worse retrieval and RMSE. Pooling
+choice on val did not transfer cleanly to test (winner's curse across 4 near-tied options).
+
+**Would be wrong if** LoRA from the probe-selected pooling does no better than LoRA from EOS
+pooling — then pooling was not the bottleneck and the probe told us little about fine-tuning.
 
 ---
 

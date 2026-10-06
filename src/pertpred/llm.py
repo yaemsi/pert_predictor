@@ -192,7 +192,9 @@ def train(args) -> None:
 
     log_dir = C.RESULTS_DIR / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
-    log_f = open(log_dir / f"{args.run_name}.jsonl", "w")
+    # --eval-only appends to an existing run's log (keeping its training curve) and skips training:
+    # it scores the best-on-val checkpoint saved so far, e.g. after a run was interrupted.
+    log_f = open(log_dir / f"{args.run_name}.jsonl", "a" if args.eval_only else "w")
     log_f.write(json.dumps({"config": vars(args), "n_train_rows": int(len(tr)), "trainable_params": n_train}) + "\n")
     ckpt = C.CKPT_DIR / f"{args.run_name}.pt"
     C.CKPT_DIR.mkdir(parents=True, exist_ok=True)
@@ -200,7 +202,7 @@ def train(args) -> None:
     best, step, t0 = -np.inf, 0, time.time()
     rng = np.random.default_rng(args.seed)
     lengths = batcher.lengths()
-    for epoch in range(args.epochs):
+    for epoch in range(0 if args.eval_only else args.epochs):
         for rows in length_grouped_batches(tr, lengths, args.batch_size, rng):
             model.train()
             opt.zero_grad(set_to_none=True)
@@ -264,6 +266,7 @@ def main() -> None:
     ap.add_argument("--head-lr", type=float, default=1e-3)
     ap.add_argument("--eval-every-epochs", type=float, default=0.25)
     ap.add_argument("--max-train-rows", type=int, default=0, help="subsample train rows (smoke tests)")
+    ap.add_argument("--eval-only", action="store_true", help="skip training; score the run's saved best-on-val checkpoint")
     ap.add_argument("--seed", type=int, default=C.SEED)
     train(ap.parse_args())
 

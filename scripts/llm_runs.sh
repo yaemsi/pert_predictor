@@ -21,9 +21,14 @@ case "${1:?run name}" in
   qwen_main)   llm qwen_main "${MAIN[@]}" ;;
   # Input-channel ablations at the main config.
   qwen_smiles) llm qwen_smiles "${MAIN[@]}" --fields cell,time,dose,smiles ;;
+  # The qwen_smiles run above was cut at step 5850/7140 by a machine shutdown. Its best-on-val
+  # checkpoint (step 1782; val flat/declining for the next 4,000 steps) was scored with:
+  qwen_smiles_eval) uv run python -m pertpred.llm --run-name qwen_smiles "${MAIN[@]}" --fields cell,time,dose,smiles \
+                      --eval-only >> results/logs/qwen_smiles.log 2>&1 ;;
   qwen_name)   llm qwen_name "${MAIN[@]}" --fields cell,time,dose,name ;;
   # Leakage check: no compound information at all. Must score ~0 centered / ~0.5 retrieval.
   qwen_ctx)    llm qwen_ctx --pool mean --epochs 2 --fields cell,time,dose ;;
   queue)       for r in qwen_main qwen_smiles qwen_name qwen_ctx; do bash "$0" "$r"; done ;;
+  resume)      for r in qwen_smiles_eval qwen_name qwen_ctx; do bash "$0" "$r"; done ;;
   *) echo "unknown run: $1" >&2; exit 1 ;;
 esac
