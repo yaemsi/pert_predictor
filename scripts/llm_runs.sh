@@ -21,8 +21,9 @@ case "${1:?run name}" in
   qwen_main)   llm qwen_main "${MAIN[@]}" ;;
   # Input-channel ablations at the main config.
   qwen_smiles) llm qwen_smiles "${MAIN[@]}" --fields cell,time,dose,smiles ;;
-  # The qwen_smiles run above was cut at step 5850/7140 by a machine shutdown. Its best-on-val
-  # checkpoint (step 1782; val flat/declining for the next 4,000 steps) was scored with:
+  # History: the first qwen_smiles run was cut at step 5850/7140 by a machine shutdown and its
+  # best-on-val checkpoint was scored with the entry below (logs: results/logs/qwen_smiles_interrupted.*).
+  # The reported numbers come from a later complete rerun of `qwen_smiles` above.
   qwen_smiles_eval) uv run python -m pertpred.llm --run-name qwen_smiles "${MAIN[@]}" --fields cell,time,dose,smiles \
                       --eval-only >> results/logs/qwen_smiles.log 2>&1 ;;
   qwen_name)   llm qwen_name "${MAIN[@]}" --fields cell,time,dose,name ;;

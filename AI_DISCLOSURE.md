@@ -42,9 +42,9 @@ code I read line by line, and anything I changed after review._
   version (direction gap, not activity gap).
 - Two writeup claims drafted from memory ("every Qwen variant scores higher on val", "87% inactive")
   were checked against the result tables, found wrong, and corrected.
-- After a machine shutdown interrupted one ablation, scoring its saved best-on-val checkpoint
-  (`--eval-only`) instead of retraining — accepted after checking its val curve had peaked 4,000
-  steps earlier; disclosed in the writeup caveats and `scripts/llm_runs.sh`.
+- After a machine shutdown interrupted one ablation, the AI first scored its saved best-on-val
+  checkpoint (`--eval-only`) instead of retraining. I asked for the run to be completed instead; the
+  complete run matched the shortcut (0.0392 vs 0.0389) and is what the writeup reports.
 
 ## External data
 

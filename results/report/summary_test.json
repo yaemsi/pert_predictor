@@ -182,17 +182,17 @@
     "retrieval_active": 0.45877333636157375
   },
   "qwen_smiles": {
-    "pearson": 0.19190689447316475,
-    "centered_pearson": 0.038896856475035546,
-    "delta_pearson": 0.05718417290081403,
-    "retrieval": 0.4660526495400181,
-    "topk_dir": 0.15014774655947108,
-    "rmse": 1.1312318703150528,
+    "pearson": 0.1940426732294319,
+    "centered_pearson": 0.03919553769099642,
+    "delta_pearson": 0.06749890052816572,
+    "retrieval": 0.47056537415050387,
+    "topk_dir": 0.15069779552204698,
+    "rmse": 1.1296241375711105,
     "n_signatures": 15231,
     "n_compounds": 264,
-    "pearson_active": 0.30209678138860685,
-    "centered_pearson_active": 0.00010918492107738651,
-    "retrieval_active": 0.4638462126810399
+    "pearson_active": 0.3008479224168073,
+    "centered_pearson_active": 0.009806203859274613,
+    "retrieval_active": 0.4529803912336804
   },
   "ridge_fp": {
     "pearson": 0.20129864139697312,

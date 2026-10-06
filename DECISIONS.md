@@ -188,3 +188,9 @@ confounded.
   bits (0.585 vs 0.592); the gap is in direction on active signatures.
 - Corrected two writeup claims after checking them against the tables: val > test is not universal
   (val is easier: 18.5% vs 12.7% active), and 83% (not 87%) of training signatures are inactive.
+- Retrained `qwen_smiles` to completion so every reported number comes from a finished run
+  (interrupted logs kept as `results/logs/qwen_smiles_interrupted.*`). Test centered Pearson 0.0392
+  vs 0.0389 from the interrupted checkpoint, retrieval 0.471 vs 0.466: the shortcut would not have
+  changed any conclusion, and the pair doubles as a run-to-run noise estimate for the LLM. With the
+  complete run, the name's contribution to retrieval moved from n.s. to borderline
+  (-0.022 [-0.044, -0.000]); the writeup reports it as borderline.

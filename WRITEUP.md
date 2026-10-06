@@ -116,7 +116,7 @@ Full table with every metric and every probe variant: `results/report/summary_te
 | probe: Morgan ‖ frozen Qwen + MLP | 0.064 [0.053, 0.077] | 0.456 [0.436, 0.473] | 0.029 | 0.434 | 0.178 |
 | qwen_full (1st try: EOS pooling, 2 ep) | 0.044 [0.034, 0.055] | 0.468 [0.449, 0.486] | -0.020 | 0.456 | 0.200 |
 | **qwen_main** (LoRA, name+SMILES) | 0.045 [0.034, 0.057] | 0.449 [0.429, 0.470] | 0.027 | 0.435 | 0.187 |
-| qwen_smiles | 0.039 [0.028, 0.050] | 0.466 [0.446, 0.486] | 0.000 | 0.464 | 0.192 |
+| qwen_smiles | 0.039 [0.028, 0.050] | 0.471 [0.453, 0.489] | 0.010 | 0.453 | 0.194 |
 | qwen_name | 0.031 [0.022, 0.039] | 0.468 [0.448, 0.488] | -0.005 | 0.459 | 0.174 |
 
 ![models](results/report/models_test.png)
@@ -130,7 +130,7 @@ negative retrieval = better):
 | Morgan‖Qwen probe - mlp_fp | +0.010 [-0.002, +0.022] | +0.014 [-0.008, +0.037] |
 | frozen Qwen probe - mlp_fp | -0.015 [-0.027, -0.003] | +0.027 [+0.004, +0.050] |
 | qwen_main - qwen_name (value of SMILES) | **+0.014 [+0.004, +0.026]** | -0.019 [-0.042, +0.002] |
-| qwen_main - qwen_smiles (value of the name) | +0.006 [-0.006, +0.018] | -0.017 [-0.042, +0.008] |
+| qwen_main - qwen_smiles (value of the name) | +0.006 [-0.005, +0.017] | -0.022 [-0.044, -0.000] |
 | qwen_main - frozen probe (value of LoRA) | +0.006 [-0.004, +0.016] | -0.020 [-0.040, +0.000] |
 
 Training-seed spread of `mlp_fp` (4 seeds): `centered_pearson` 0.049–0.053, retrieval 0.444–0.450.
@@ -141,9 +141,10 @@ LLM runs are single-seed (see caveats).
    without the compound lines, scores the null on every compound-specific metric.
 2. *Would a simple baseline embarrass it?* Not embarrass, but match: a fingerprint MLP is as good
    overall and better on active signatures, and Tanimoto kNN is the best model on active signatures.
-3. *Chemistry or world knowledge?* Mostly chemistry. Removing SMILES costs a significant 0.014;
-   removing the name costs a non-significant 0.006. The name alone does carry signal (0.031, above
-   the null), so Qwen's pretrained knowledge of drug names is real but small and redundant with
+3. *Chemistry or world knowledge?* Mostly chemistry. Removing SMILES costs a significant 0.014 in
+   centered Pearson; removing the name costs 0.006 (not significant) in centered Pearson and 0.022 in
+   retrieval (borderline: the CI touches 0). The name alone does carry signal (0.031, above the
+   null), so Qwen's pretrained knowledge of drug names is real but small and largely redundant with
    structure.
 4. *Does fine-tuning matter?* A little. LoRA beats the frozen probe mainly on retrieval
    (-0.020 [-0.040, 0.000]); on centered Pearson the gain is within noise.
@@ -156,7 +157,7 @@ strength as a classifier of the active flag, within context (`results/report/act
 |---|---|
 | qwen_ctx | 0.494 |
 | qwen_name | 0.519 |
-| qwen_smiles | 0.572 |
+| qwen_smiles | 0.549 |
 | knn_tanimoto | 0.582 |
 | qwen_main | 0.585 |
 | mlp_fp | 0.592 |
@@ -189,7 +190,7 @@ low-dose signatures being inactive.
   partly because val is easier (18.5% active signatures vs 12.7% in test). The largest drops are on
   choices made from a noisy val peak: the probe pooling picked from 4 near-tied options (0.055 ->
   0.039), the SMILES-only probe (0.060 -> 0.034) and the `qwen_smiles` checkpoint (val 0.062 at
-  epoch 1.5, test 0.039). With 176 val compounds a single val peak overstates.
+  epoch 2.2, test 0.039). With 176 val compounds a single val peak overstates.
 - **Small cell lines.** iPSC-derived and primary lines (NEU, NPC, ASC, SKL; 28–32 test compounds
   each) land between -0.03 and +0.05 with no consistent winner and wide intervals; the overall
   numbers are driven by the 7 core lines.
@@ -197,10 +198,12 @@ low-dose signatures being inactive.
   mean: `mlp_fp` has the best compound-specific scores but *lower* raw Pearson (0.181) than
   `context_mean` (0.200) and `qwen_ctx` (0.200).
 
-**Caveats.** LLM runs are single-seed (only the MLP's seed spread was measured, 0.004). `qwen_smiles`
-was interrupted by a machine shutdown at step 5,850/7,140; it is scored from its best-on-val
-checkpoint (step 1,782), and its val curve was flat or declining for the 4,000 steps after that. The
-split is by compound, not scaffold.
+**Caveats.** LLM runs are single-seed (the MLP's seed spread was measured: 0.004). One incidental
+estimate of LLM run-to-run noise: `qwen_smiles` was interrupted by a machine shutdown, scored from
+its best checkpoint, then retrained to completion with the same seed; the two runs give test
+centered Pearson 0.0389 vs 0.0392 and retrieval 0.466 vs 0.471 (GPU kernels are not bit-deterministic).
+That is a lower bound on run-to-run variance, not a substitute for seeds. The split is by compound,
+not scaffold.
 
 ## 7. What I tried and what changed
 
