@@ -37,6 +37,14 @@ code I read line by line, and anything I changed after review._
 - First LLM batching ran out of GPU memory; replaced with length-grouped batches and token-budget
   micro-batching with gradient accumulation (same effective batch).
 - Raw Pearson as the headline — rejected once the context mean alone reached the replicate ceiling.
+- The AI's interpretation "the LLM knows whether a compound acts but not what it does" — tested with
+  an activity AUROC before writing it up; it was half wrong and the writeup reports the corrected
+  version (direction gap, not activity gap).
+- Two writeup claims drafted from memory ("every Qwen variant scores higher on val", "87% inactive")
+  were checked against the result tables, found wrong, and corrected.
+- After a machine shutdown interrupted one ablation, scoring its saved best-on-val checkpoint
+  (`--eval-only`) instead of retraining — accepted after checking its val curve had peaked 4,000
+  steps earlier; disclosed in the writeup caveats and `scripts/llm_runs.sh`.
 
 ## External data
 

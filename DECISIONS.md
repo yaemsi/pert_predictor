@@ -42,6 +42,10 @@ train = 0.36), and I report performance by similarity bin instead of hiding the 
 **Would be wrong if** results are driven by close analogues (performance concentrated in the
 high-similarity bin) — then a scaffold split is required to support any "new chemistry" claim.
 
+**Outcome (partly triggered).** Every model, LLM included, rises from ~0.02 (max Tanimoto <= 0.3,
+75 compounds) to 0.08–0.10 (0.4–0.5). Signal on the most novel compounds is above zero but small, so
+the writeup does not claim generalization to new chemistry; a scaffold split is next-steps item 2.
+
 ## D3. Headline metrics: centered Pearson and within-context retrieval, aggregated per compound
 
 **Chosen.** Two headline metrics that are exactly 0 / exactly chance for any compound-agnostic model:
@@ -69,6 +73,11 @@ signatures.
 **Would be wrong if** the centering made models look good that are useless in practice — e.g. a
 model with high `centered_pearson` but no retrieval ability, or one whose gain is confined to
 inactive signatures. Both are reported side by side to catch exactly that.
+
+**Outcome.** The null checks hold exactly (`zero`, `context_mean`, `qwen_ctx`). The failure mode it
+was designed to catch did occur: the single-channel LLMs earn their `centered_pearson` almost
+entirely on inactive signatures (active-only ~0). That is visible only because the active stratum
+is reported next to the overall number — keep reporting both.
 
 ## D4. Drop the per-plate positive controls
 
@@ -106,6 +115,10 @@ training compounds is a small dataset for 500M parameters, and the weights are n
 **Would be wrong if** the frozen probe matches or beats LoRA (fine-tuning buys nothing), or if a
 generative variant beats the head on `topk_dir`.
 
+**Outcome (partly triggered).** LoRA vs frozen probe: `centered_pearson` +0.006 [-0.004, +0.016]
+(no detectable gain), retrieval -0.020 [-0.040, 0.000] (borderline gain). Fine-tuning buys little on
+this data. The generative alternative was not run, so the second condition is untested.
+
 ## D6. Choose the LLM's read-out with a cheap frozen probe before spending GPU on LoRA
 
 **Chosen.** Mean pooling over prompt tokens at the final layer, picked on val from a frozen-Qwen
@@ -129,6 +142,12 @@ choice on val did not transfer cleanly to test (winner's curse across 4 near-tie
 **Would be wrong if** LoRA from the probe-selected pooling does no better than LoRA from EOS
 pooling — then pooling was not the bottleneck and the probe told us little about fine-tuning.
 
+**Outcome (mixed).** On all signatures `qwen_main` and `qwen_full` tie (+0.001 [-0.014, +0.015]);
+on active signatures mean pooling moved the LoRA model from -0.020 to 0.027 and retrieval from
+0.468 to 0.449. The probe's pooling choice helped where the first model was worst, but did not
+change the headline number. Note `qwen_main` also trained 3x longer, so the two changes are
+confounded.
+
 ---
 
 ## Dated notes
@@ -149,3 +168,23 @@ pooling — then pooling was not the bottleneck and the probe told us little abo
   Morgan bits (0.060 val). Rather than guess, ran a frozen-embedding probe to pick pooling / layer.
 - Tool note: one probe run was killed by a 10-minute foreground timeout and its log was empty
   because stdout was block-buffered. Long jobs now run in the background with `PYTHONUNBUFFERED=1`.
+- Probe: mean pooling at the final layer chosen on val; every frozen-Qwen variant is below Morgan
+  bits in the same MLP (D6). Morgan||Qwen: +0.010 [-0.002, +0.022], not significant.
+- `mlp_fp` seed spread (4 seeds): 0.049–0.053 test `centered_pearson` — smaller than the gaps
+  being compared, so single-seed MLP comparisons are meaningful; LLM seeds not measured.
+- `qwen_main` (mean pooling, 6 epochs): val peaked at epoch 3 (0.054) and declined after; test
+  0.045, tied with `mlp_fp`, behind on active signatures.
+
+**2026-10-06**
+- Machine shutdown overnight cut `qwen_smiles` at step 5,850/7,140. Rather than spend 45 min
+  retraining, added `--eval-only` to score its best-on-val checkpoint (step 1,782; val flat or
+  declining for 4,000 steps after, and the main run's last 18% was flat too). Recorded in
+  `scripts/llm_runs.sh`.
+- Ablations: SMILES matters (+0.014 [+0.004, +0.026] over name-only); the name does not add
+  measurably over SMILES (+0.006, n.s.); name-only still carries signal (0.031). `qwen_ctx` scores
+  the null on every compound-specific metric: no metadata leakage.
+- Hypothesis "the LLM knows *whether* a compound acts but not *what* it does" was half wrong. An
+  activity AUROC check (now in `evaluate.py`) shows `qwen_main` ranks activity as well as Morgan
+  bits (0.585 vs 0.592); the gap is in direction on active signatures.
+- Corrected two writeup claims after checking them against the tables: val > test is not universal
+  (val is easier: 18.5% vs 12.7% active), and 83% (not 87%) of training signatures are inactive.

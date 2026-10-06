@@ -10,6 +10,14 @@ Qwen2.5-0.5B, against strong non-LLM baselines.
   [`results/per_signature/`](results/per_signature/) (every model's per-signature metrics, re-aggregatable),
   [`results/logs/`](results/logs/) (training curves and run logs)
 
+## Result in one paragraph
+
+On 264 held-out compounds, Qwen2.5-0.5B with LoRA reading the condition as text reaches centered
+Pearson 0.045 and retrieval rank 0.449 (0.5 = chance), statistically tied with an MLP on Morgan
+fingerprints (0.054 / 0.442) and weaker on signatures with real signal. A context-only version of
+the same model scores exactly the null, so the gain comes from the compound text. Details, failure
+modes and next steps in [`WRITEUP.md`](WRITEUP.md); headline figure `results/report/models_test.png`.
+
 ## Task in one paragraph
 
 Input: a cell line, a time point, a dose, and a compound (common name if it has one, SMILES).
@@ -45,8 +53,8 @@ uv run python -m pertpred.split       # compound-grouped split, Morgan fingerpri
 uv run python -m pertpred.eda         # data diagnostics -> results/eda/                (~30 s)
 uv run python -m pertpred.baselines   # zero, context mean, kNN, ridge, MLP             (~3 min, GPU optional)
 uv run python -m pertpred.probe       # frozen Qwen embeddings -> same MLP              (~15 min, GPU)
-uv run python -m pertpred.llm --run-name qwen_full                                  # LoRA run (GPU)
-uv run python -m pertpred.evaluate    # tables + plots -> results/report/
+bash scripts/llm_runs.sh queue        # main LoRA model + 3 ablations                   (~3 h, GPU)
+uv run python -m pertpred.evaluate    # tables, paired tests, plots -> results/report/  (~2 min)
 ```
 
 The exact LLM runs behind the reported numbers are listed, with their command lines, in

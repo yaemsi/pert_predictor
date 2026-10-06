@@ -129,6 +129,19 @@
     "centered_pearson_active": 0.03640066779210394,
     "retrieval_active": 0.44276601829843154
   },
+  "qwen_ctx": {
+    "pearson": 0.20006145027779984,
+    "centered_pearson": -7.456069771765819e-05,
+    "delta_pearson": 0.016666747146014887,
+    "retrieval": 0.4995922984892999,
+    "topk_dir": 0.15522566813569305,
+    "rmse": 1.1243474597871923,
+    "n_signatures": 15231,
+    "n_compounds": 264,
+    "pearson_active": 0.34471127652111033,
+    "centered_pearson_active": 0.002383049672381772,
+    "retrieval_active": 0.49610462448194914
+  },
   "qwen_full": {
     "pearson": 0.19985497407884364,
     "centered_pearson": 0.04395595205830442,
@@ -141,6 +154,45 @@
     "pearson_active": 0.3286942042576884,
     "centered_pearson_active": -0.02001883545893941,
     "retrieval_active": 0.4556775781227613
+  },
+  "qwen_main": {
+    "pearson": 0.18660687346239074,
+    "centered_pearson": 0.044788053303085315,
+    "delta_pearson": 0.0585251225011815,
+    "retrieval": 0.44875069793943995,
+    "topk_dir": 0.14568506791620342,
+    "rmse": 1.13531736451259,
+    "n_signatures": 15231,
+    "n_compounds": 264,
+    "pearson_active": 0.30183555681934277,
+    "centered_pearson_active": 0.02735612841804784,
+    "retrieval_active": 0.435234586245667
+  },
+  "qwen_name": {
+    "pearson": 0.17398305293153954,
+    "centered_pearson": 0.030621740044164462,
+    "delta_pearson": 0.047742111158196265,
+    "retrieval": 0.4677945332038263,
+    "topk_dir": 0.13764931966536564,
+    "rmse": 1.1548298822792007,
+    "n_signatures": 15231,
+    "n_compounds": 264,
+    "pearson_active": 0.26520277452002944,
+    "centered_pearson_active": -0.0049856700464830424,
+    "retrieval_active": 0.45877333636157375
+  },
+  "qwen_smiles": {
+    "pearson": 0.19190689447316475,
+    "centered_pearson": 0.038896856475035546,
+    "delta_pearson": 0.05718417290081403,
+    "retrieval": 0.4660526495400181,
+    "topk_dir": 0.15014774655947108,
+    "rmse": 1.1312318703150528,
+    "n_signatures": 15231,
+    "n_compounds": 264,
+    "pearson_active": 0.30209678138860685,
+    "centered_pearson_active": 0.00010918492107738651,
+    "retrieval_active": 0.4638462126810399
   },
   "ridge_fp": {
     "pearson": 0.20129864139697312,

@@ -137,6 +137,40 @@ def report(split: str = "test", reference: str = "mlp_fp") -> None:
     strata = _strata(tables, out_dir, split)
     _plot_summary(tables, out_dir, split)
     _plot_similarity(strata, out_dir, split)
+    _activity_auroc(list(tables), out_dir, split)
+
+
+def _activity_auroc(names: list[str], out_dir, split: str) -> None:
+    """Does a model know *whether* a compound acts? AUROC of predicted response strength
+    (||pred - context mean||) for the DMSO-based active flag, computed within each cell x time x dose
+    context (activity rises steeply with dose) and size-weighted across contexts. This separates
+    "predicts activity" from "predicts which genes move", which centered_pearson mixes together."""
+    from sklearn.metrics import roc_auc_score
+
+    from pertpred.task import fit_context_mean, load_task
+
+    task = load_task()
+    _, mu = fit_context_mean(task)
+    rows = task.idx(split)
+    active = activity_flags(task, rows)
+    ctx = context_key(task.meta.iloc[rows])
+    out = {}
+    for name in names:
+        if not (C.PRED_DIR / f"{name}.npz").exists():
+            continue
+        idx, pred = load_predictions(name)
+        pos = pd.Series(np.arange(len(idx)), index=idx).loc[rows].to_numpy()
+        strength = np.linalg.norm(pred[pos] - mu[rows], axis=1)
+        aucs, w = [], []
+        for c in np.unique(ctx):
+            m = ctx == c
+            if active[m].min() != active[m].max() and np.ptp(strength[m]) > 0:
+                aucs.append(roc_auc_score(active[m], strength[m]))
+                w.append(m.sum())
+        out[name] = float(np.average(aucs, weights=w)) if aucs else 0.5
+    tab = pd.Series(out, name="within-context AUROC (active | predicted strength)").sort_values().to_frame()
+    (out_dir / f"activity_auroc_{split}.md").write_text(tab.to_markdown(floatfmt=".3f"))
+    print(f"\n{tab.to_string(float_format='%.3f')}")
 
 
 MODEL_ORDER = ["zero", "context_mean", "knn_tanimoto", "ridge_fp", "mlp_fp"]
@@ -201,15 +235,18 @@ def _plot_similarity(strata: pd.DataFrame, out_dir, split: str) -> None:
     from pertpred.plotstyle import SERIES, plt, setup
 
     setup()
-    s = strata[(strata["stratum"] == "tani_bin") & (strata["level"] != "nan")]
+    order = ["<=0.3", "0.3-0.4", "0.4-0.5", "0.5-0.7", ">0.7"]
+    s = strata[(strata["stratum"] == "tani_bin") & strata["level"].isin(order)].copy()
+    s["pos"] = s["level"].map({lv: i for i, lv in enumerate(order)})
+    s = s.sort_values("pos")
     show = [n for n in ("knn_tanimoto", "mlp_fp", "qwen_main") if n in set(s["model"])]
     fig, ax = plt.subplots(figsize=(6.4, 3.4))
     for color, name in zip(SERIES, show):
         g = s[s["model"] == name]
-        ax.plot(g["level"], g["centered_pearson"], marker="o", ms=6, color=color, label=name)
-    counts = s[s["model"] == show[0]][["level", "n_cmp"]] if show else []
+        ax.plot(g["pos"], g["centered_pearson"], marker="o", ms=6, color=color, label=name)
+    counts = s[s["model"] == show[0]][["pos", "level", "n_cmp"]] if show else []
     if len(counts):
-        ax.set_xticks(range(len(counts)), [f"{lv}\n{n} cmpds" for lv, n in zip(counts["level"], counts["n_cmp"])])
+        ax.set_xticks(counts["pos"], [f"{lv}\n{n} cmpds" for lv, n in zip(counts["level"], counts["n_cmp"])])
     ax.axhline(0, color="#8a8984", lw=1.2, ls="--")
     ax.set_xlabel("max Tanimoto similarity to any training compound")
     ax.set_ylabel("centered Pearson")
@@ -226,7 +263,10 @@ def _strata(tables: dict[str, pd.DataFrame], out_dir, split: str) -> pd.DataFram
     pieces = []
     for name, df in tables.items():
         df = df.copy()
-        df["tani_bin"] = pd.cut(df["max_tani_train"], [0, 0.3, 0.4, 0.5, 0.7, 1.0], include_lowest=True).astype(str)
+        df["tani_bin"] = pd.cut(
+            df["max_tani_train"], [0, 0.3, 0.4, 0.5, 0.7, 1.0], include_lowest=True,
+            labels=["<=0.3", "0.3-0.4", "0.4-0.5", "0.5-0.7", ">0.7"],
+        ).astype(str)
         for col in ("cell_id", "time_h", "dose_bin", "is_named", "active", "tani_bin"):
             for level, g in df.groupby(col):
                 pieces.append(

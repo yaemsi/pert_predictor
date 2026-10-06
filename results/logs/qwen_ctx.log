@@ -1,0 +1,66 @@
+example prompt (qwen_ctx):
+cell line: A375 (skin)
+time: 24 h
+dose: 10 uM
+---
+prompt tokens: median=28 max=36
+trainable parameters: 9.68M
+step 50/2380 epoch 0 loss 1.0463 (450 rows/s)
+step 100/2380 epoch 0 loss 1.3763 (476 rows/s)
+step 150/2380 epoch 0 loss 1.9317 (485 rows/s)
+step 200/2380 epoch 0 loss 2.0078 (491 rows/s)
+step 250/2380 epoch 0 loss 1.2891 (496 rows/s)
+  [val] step 297 centered_pearson=0.0009 mse=1.6050
+step 300/2380 epoch 0 loss 1.4809 (409 rows/s)
+step 350/2380 epoch 0 loss 1.6864 (423 rows/s)
+step 400/2380 epoch 0 loss 1.5543 (428 rows/s)
+step 450/2380 epoch 0 loss 1.5195 (432 rows/s)
+step 500/2380 epoch 0 loss 1.4968 (436 rows/s)
+step 550/2380 epoch 0 loss 1.3648 (443 rows/s)
+  [val] step 594 centered_pearson=-0.0009 mse=1.6034
+step 600/2380 epoch 0 loss 1.6365 (405 rows/s)
+step 650/2380 epoch 0 loss 1.2795 (413 rows/s)
+step 700/2380 epoch 0 loss 1.3752 (418 rows/s)
+step 750/2380 epoch 0 loss 1.5283 (423 rows/s)
+step 800/2380 epoch 0 loss 1.3685 (428 rows/s)
+step 850/2380 epoch 0 loss 1.0802 (433 rows/s)
+  [val] step 891 centered_pearson=-0.0047 mse=1.6033
+step 900/2380 epoch 0 loss 3.0792 (406 rows/s)
+step 950/2380 epoch 0 loss 1.4821 (410 rows/s)
+step 1000/2380 epoch 0 loss 1.8403 (413 rows/s)
+step 1050/2380 epoch 0 loss 1.3069 (416 rows/s)
+step 1100/2380 epoch 0 loss 1.1933 (419 rows/s)
+step 1150/2380 epoch 0 loss 1.2007 (422 rows/s)
+  [val] step 1188 centered_pearson=0.0012 mse=1.6028
+step 1200/2380 epoch 1 loss 1.7505 (403 rows/s)
+step 1250/2380 epoch 1 loss 1.3719 (405 rows/s)
+step 1300/2380 epoch 1 loss 1.4756 (408 rows/s)
+step 1350/2380 epoch 1 loss 1.9530 (411 rows/s)
+step 1400/2380 epoch 1 loss 1.3504 (413 rows/s)
+step 1450/2380 epoch 1 loss 1.8233 (415 rows/s)
+  [val] step 1485 centered_pearson=0.0030 mse=1.6027
+step 1500/2380 epoch 1 loss 1.1906 (402 rows/s)
+step 1550/2380 epoch 1 loss 1.2576 (405 rows/s)
+step 1600/2380 epoch 1 loss 1.3659 (408 rows/s)
+step 1650/2380 epoch 1 loss 1.8005 (411 rows/s)
+step 1700/2380 epoch 1 loss 2.2577 (414 rows/s)
+step 1750/2380 epoch 1 loss 1.4328 (417 rows/s)
+  [val] step 1782 centered_pearson=0.0025 mse=1.6024
+step 1800/2380 epoch 1 loss 1.9325 (407 rows/s)
+step 1850/2380 epoch 1 loss 2.1694 (409 rows/s)
+step 1900/2380 epoch 1 loss 1.2540 (412 rows/s)
+step 1950/2380 epoch 1 loss 2.1154 (415 rows/s)
+step 2000/2380 epoch 1 loss 2.0955 (417 rows/s)
+step 2050/2380 epoch 1 loss 1.4406 (419 rows/s)
+  [val] step 2079 centered_pearson=0.0016 mse=1.6026
+step 2100/2380 epoch 1 loss 1.7147 (409 rows/s)
+step 2150/2380 epoch 1 loss 1.7514 (411 rows/s)
+step 2200/2380 epoch 1 loss 1.5546 (414 rows/s)
+step 2250/2380 epoch 1 loss 1.4872 (416 rows/s)
+step 2300/2380 epoch 1 loss 1.5827 (418 rows/s)
+step 2350/2380 epoch 1 loss 1.8403 (419 rows/s)
+  [val] step 2376 centered_pearson=0.0025 mse=1.6026
+  [val] step 2380 centered_pearson=0.0020 mse=1.6026
+best val centered_pearson=0.0030 at step 1485
+[qwen_ctx | val] pearson=0.2016  centered_pearson=0.0039  delta_pearson=0.0155  retrieval=0.4963  topk_dir=0.1598  rmse=1.1573
+[qwen_ctx | test] pearson=0.2001  centered_pearson=-0.0001  delta_pearson=0.0167  retrieval=0.4996  topk_dir=0.1552  rmse=1.1243
