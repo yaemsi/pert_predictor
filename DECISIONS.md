@@ -199,5 +199,8 @@ confounded.
   estramustine / -phosphate (train / val), ixazomib / -citrate (val / test). None links train to
   test, so test scores are not leaked; val-based selection saw one near-duplicate of a test
   compound. Not worth ~5 GPU-hours of reruns; a name-stem rule should be added to the grouping.
+- No MOA labels in any supplied table (checked every header). Decided not to import public MOA
+  annotations, even for post-hoc stratification: it would attach external annotations to evaluation
+  rows. Recorded as an unchecked failure mode in the writeup.
 - Cache moved to `data/pre-processed/` (the workspace's own slot for derived data; `submit` skips
   `data/`). Level 3 decompressed there too (17 GB) for the notebook's raw-vs-differential section.

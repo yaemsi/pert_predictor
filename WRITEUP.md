@@ -199,6 +199,10 @@ low-dose signatures being inactive.
 - **Small cell lines.** iPSC-derived and primary lines (NEU, NPC, ASC, SKL; 28–32 test compounds
   each) land between -0.03 and +0.05 with no consistent winner and wide intervals; the overall
   numbers are driven by the 7 core lines.
+- **Not checked by mechanism of action.** The supplied tables carry no MOA labels (only 10 of
+  1,796 compound names state a mechanism, e.g. `GSK-3-inhibitor-II`). Public MOA annotations exist,
+  but joining them onto test compounds would cross the no-external-lookup boundary, so a model could
+  still be failing completely on one MOA class without this evaluation showing it.
 - **The default metric ranks models backwards.** Raw Pearson rewards staying close to the context
   mean: `mlp_fp` has the best compound-specific scores but *lower* raw Pearson (0.181) than
   `context_mean` (0.200) and `qwen_ctx` (0.200).
