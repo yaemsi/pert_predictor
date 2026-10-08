@@ -6,9 +6,9 @@ Qwen2.5-0.5B, against strong non-LLM baselines.
 - Writeup (framing, results, failure modes, next steps): [`WRITEUP.md`](WRITEUP.md)
 - Decision record: [`DECISIONS.md`](DECISIONS.md)
 - AI disclosure: [`AI_DISCLOSURE.md`](AI_DISCLOSURE.md)
-- Numbers: [`results/report/`](results/report/) (tables, plots), [`results/eda/`](results/eda/) (data diagnostics),
-  [`results/per_signature/`](results/per_signature/) (every model's per-signature metrics, re-aggregatable),
-  [`results/logs/`](results/logs/) (training curves and run logs)
+- Numbers: [`outputs/results/report/`](outputs/results/report/) (tables, plots), [`outputs/results/eda/`](outputs/results/eda/) (data diagnostics),
+  [`outputs/results/per_signature/`](outputs/results/per_signature/) (every model's per-signature metrics, re-aggregatable),
+  [`outputs/results/logs/`](outputs/results/logs/) (training curves and run logs)
 
 ## Result in one paragraph
 
@@ -17,7 +17,7 @@ Pearson 0.045 and retrieval rank 0.449 (0.5 = chance), statistically tied with a
 fingerprints (0.054 / 0.442) and weaker on signatures with real signal. A context-only version of
 the same model scores the null (0.001), so the gain comes from the compound text. A Cell2Sentence-style
 variant that *writes* the top-25 up / down genes as text does markedly worse (centered Pearson 0.003). Details, failure
-modes and next steps in [`WRITEUP.md`](WRITEUP.md); headline figure `results/report/models_test.png`.
+modes and next steps in [`WRITEUP.md`](WRITEUP.md); headline figure `outputs/results/report/models_test.png`.
 
 ## Task in one paragraph
 
@@ -40,30 +40,32 @@ Paths are environment variables so the same code runs locally and under Slurm:
 
 | variable | default | holds |
 |---|---|---|
-| `PERTPRED_DATA` | `./data/raw` | the raw GEO files (read-only) |
-| `PERTPRED_CACHE` | `./data/pre-processed` | decompressed gctx (Level 5: 5.8 GB; Level 3: 17 GB, notebook only), matrices, predictions, checkpoints |
-| `PERTPRED_RESULTS` | `./results` | small outputs that belong in the submission |
+| `PERTPRED_DATA` | `./data` | the raw GEO files (read-only) |
+| `PERTPRED_CACHE` | `./outputs/processed_data` | decompressed gctx (Level 5: 5.8 GB; Level 3: 17 GB, notebook only), matrices, predictions, checkpoints |
+| `PERTPRED_RESULTS` | `./outputs/results` | small outputs that belong in the submission |
 
-The cache lives under `data/`, which `submit` does not package, so weights and matrices never reach the submission.
-If `data/` is read-only on the cluster, point `PERTPRED_CACHE` at a writable path (e.g. `/scratch/slurm/...` or `$HOME`).
+**Before `submit`:** move or delete `outputs/processed_data/` (~26 GB, git-ignored). It holds the LoRA
+checkpoints, which must not be submitted, and `submit` packages the workspace except `data/`.
+On the cluster, pointing `PERTPRED_CACHE` outside the workspace (e.g. `$HOME/pertpred_cache`) avoids
+the problem altogether; `/scratch/slurm` is ephemeral, so only use it for a single job.
 
 ## Reproduce
 
 ```bash
 uv run python main.py prepare        # decompress Level 5, extract 978 landmarks       (~2 min, CPU)
 uv run python main.py split          # compound-grouped split, Morgan fingerprints     (~10 s)
-uv run python main.py eda            # data diagnostics -> results/eda/                (~30 s)
+uv run python main.py eda            # data diagnostics -> outputs/results/eda/                (~30 s)
 uv run python main.py baselines      # zero, context mean, kNN, ridge, MLP             (~3 min, GPU optional)
 uv run python main.py probe          # frozen Qwen embeddings -> same MLP              (~10 min, GPU)
 bash scripts/llm_runs.sh queue        # main LoRA model + 3 ablations                   (~3 h, GPU)
 bash scripts/llm_runs.sh queue2       # 6-epoch drug-free control + full fine-tuning    (~1.5 h, GPU)
 bash scripts/llm_runs.sh qwen_gen     # Cell2Sentence-style generative variant         (~1.5 h, GPU)
-uv run python main.py evaluate       # tables, paired tests, plots -> results/report/  (~2 min)
+uv run python main.py evaluate       # tables, paired tests, plots -> outputs/results/report/  (~2 min)
 ```
 
 The exact LLM runs behind the reported numbers are listed, with their command lines, in
 [`scripts/llm_runs.sh`](scripts/llm_runs.sh). Each run's config is also the first line of
-`results/logs/<run>.jsonl`.
+`outputs/results/logs/<run>.jsonl`.
 
 On the remote workspace, wrap any GPU step with the provided launcher, e.g.
 
@@ -94,7 +96,7 @@ the submission.
 [`notebooks/01_data_tour.ipynb`](notebooks/01_data_tour.ipynb) walks through every raw file, how
 they link, and what the measurements look like, with plots (saved in the notebook). Re-run with
 `uv run jupyter nbconvert --to notebook --execute --inplace notebooks/01_data_tour.ipynb`; section 9
-needs Level 3 decompressed into `data/pre-processed/level3.gctx` and is skipped otherwise.
+needs Level 3 decompressed into `outputs/processed_data/level3.gctx` and is skipped otherwise.
 
 ## Code map
 

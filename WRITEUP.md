@@ -42,12 +42,12 @@ Pitfalls found, in the order they changed the plan:
 
 2. **Most signatures are noise.** Comparing treated signatures with the DMSO vehicle signatures in
    the same release, the median norm is nearly the same (32.1 vs 30.4) and only **16%** of treated
-   signatures exceed the 95th percentile of vehicle (`results/eda/signal_vs_vehicle.png`). I report
+   signatures exceed the 95th percentile of vehicle (`outputs/results/eda/signal_vs_vehicle.png`). I report
    every metric on all signatures and on this "active" subset.
 
 3. **The ceiling is low.** 4,456 conditions were measured twice on different plates. One measurement
    predicts the other with median Pearson **0.19** — 0.63 when both are active, 0.17 otherwise
-   (`results/eda/replicate_ceiling.png`). No model should be expected to beat this on average.
+   (`outputs/results/eda/replicate_ceiling.png`). No model should be expected to beat this on average.
 
 4. **Raw Pearson measures the context.** The cell x time x dose training mean, which knows nothing
    about the compound, already scores Pearson 0.20 on held-out compounds — at the replicate ceiling.
@@ -124,7 +124,7 @@ top-25 overlap 0.997, and the context mean's own top genes give 0.142 (its direc
 
 Test set: 264 compound groups, 15,231 signatures. Compound-level mean with 95% bootstrap CI over
 compounds. "Active" = signatures above the DMSO 95th-percentile norm (13% of test signatures).
-Full table with every metric and every probe variant: `results/report/summary_test.md`.
+Full table with every metric and every probe variant: `outputs/results/report/summary_test.md`.
 
 | model | centered Pearson | retrieval (0.5 = chance) | centered, active | retrieval, active | raw Pearson |
 |---|---|---|---|---|---|
@@ -142,7 +142,7 @@ Full table with every metric and every probe variant: `results/report/summary_te
 | qwen_allweights (full fine-tuning) | 0.040 [0.029, 0.051] | 0.456 [0.436, 0.477] | 0.021 | 0.442 | 0.184 |
 | qwen_gen (generative, C2S-style) | 0.003 [0.001, 0.004] | 0.493 [0.485, 0.501] | 0.006 | 0.475 | 0.117 |
 
-![models](results/report/models_test.png)
+![models](outputs/results/report/models_test.png)
 
 **Paired comparisons** (compound bootstrap, difference in `centered_pearson` / `retrieval`;
 negative retrieval = better):
@@ -197,7 +197,7 @@ LLM runs are single-seed (see caveats).
 
 **Knowing *whether* vs knowing *what*.** `centered_pearson` mixes two abilities: ranking compounds by
 how strongly they act, and getting the direction of the response right. Scoring predicted response
-strength as a classifier of the active flag, within context (`results/report/activity_auroc_test.md`):
+strength as a classifier of the active flag, within context (`outputs/results/report/activity_auroc_test.md`):
 
 | model | AUROC (active \| predicted strength) |
 |---|---|
@@ -214,14 +214,14 @@ strength as a classifier of the active flag, within context (`results/report/act
 *which genes* move once it does (active-signature centered Pearson 0.027 vs 0.055). The best activity
 ranker is the Morgan + Qwen concatenation — the one place where Qwen measurably adds to chemistry.
 
-**Generalization with chemical novelty** (`results/report/similarity_test.png`). Every model
+**Generalization with chemical novelty** (`outputs/results/report/similarity_test.png`). Every model
 degrades together as test compounds get further from training chemistry: centered Pearson ~0.02 for
 the 75 compounds with max Tanimoto <= 0.3, ~0.08–0.10 at 0.4–0.5. The LLM does not escape this; it
 tracks the MLP at low similarity and falls behind at high similarity, where analog lookup is easiest.
 
-![similarity](results/report/similarity_test.png)
+![similarity](outputs/results/report/similarity_test.png)
 
-**By dose** (`results/report/strata_test.csv`): signal is concentrated at 3.33–10 µM (`mlp_fp` 0.077 /
+**By dose** (`outputs/results/report/strata_test.csv`): signal is concentrated at 3.33–10 µM (`mlp_fp` 0.077 /
 0.123, `qwen_main` 0.055 / 0.110) and close to zero at 0.04 µM for all models, consistent with most
 low-dose signatures being inactive.
 

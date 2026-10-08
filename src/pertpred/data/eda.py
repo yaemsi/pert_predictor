@@ -1,4 +1,4 @@
-"""Data diagnostics that shaped the evaluation design. Writes results/eda/.
+"""Data diagnostics that shaped the evaluation design. Writes outputs/results/eda/.
 
 1. How much of a signature is signal? Treated vs DMSO consensus-signature norms.
 2. Empirical noise ceiling: conditions measured twice (same compound, cell, time, dose on different

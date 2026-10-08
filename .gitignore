@@ -11,3 +11,4 @@ checkpoints/
 *.npz
 .ipynb_checkpoints/
 .claude/settings.local.json
+/outputs/processed_data/

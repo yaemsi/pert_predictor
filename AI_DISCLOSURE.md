@@ -25,7 +25,7 @@ Checks built into the code (these run every time):
   cannot be gamed by context information.
 - LLM: zero-initialized head, so an untrained model reproduces the context-mean baseline exactly.
 - Test split is only used for reporting; every hyperparameter (k, ridge alpha, MLP epoch, LoRA
-  checkpoint, probe pooling) is chosen on val, and the choices are logged in `results/logs/`.
+  checkpoint, probe pooling) is chosen on val, and the choices are logged in `outputs/results/logs/`.
 
 _To complete by me before submitting: what I re-derived or re-ran by hand, which parts of the
 code I read line by line, and anything I changed after review._

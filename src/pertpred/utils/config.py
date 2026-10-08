@@ -6,12 +6,14 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[3]  # src/pertpred/utils/config.py -> repo
 
 # Raw GEO files (read-only in the remote workspace).
-DATA_DIR = Path(os.environ.get("PERTPRED_DATA", REPO_ROOT / "data" / "raw"))
-# Large derived files (decompressed gctx, matrices, predictions, checkpoints). Lives under data/,
-# which `submit` does not package, so weights and matrices never end up in the submission.
-CACHE_DIR = Path(os.environ.get("PERTPRED_CACHE", REPO_ROOT / "data" / "pre-processed"))
+DATA_DIR = Path(os.environ.get("PERTPRED_DATA", REPO_ROOT / "data"))
+OUTPUTS_DIR = REPO_ROOT / "outputs"
+# Large derived files (decompressed gctx, matrices, predictions, checkpoints; ~26 GB). Git-ignored.
+# NOT part of the submission (checkpoints must not be submitted): move or delete it before `submit`,
+# or point PERTPRED_CACHE outside the workspace (e.g. /scratch on the cluster).
+CACHE_DIR = Path(os.environ.get("PERTPRED_CACHE", OUTPUTS_DIR / "processed_data"))
 # Small, reviewable outputs (metrics, tables, plots, logs) that ARE part of the submission.
-RESULTS_DIR = Path(os.environ.get("PERTPRED_RESULTS", REPO_ROOT / "results"))
+RESULTS_DIR = Path(os.environ.get("PERTPRED_RESULTS", OUTPUTS_DIR / "results"))
 
 PREFIX = "GSE70138_Broad_LINCS_"
 LEVEL5_GZ = DATA_DIR / f"{PREFIX}Level5_COMPZ_n118050x12328_2017-03-06.gctx.gz"

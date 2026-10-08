@@ -3,12 +3,12 @@
 Pipeline, in order:
     prepare    decompress Level 5, extract the 978 landmark genes          (CPU, ~2 min)
     split      compound-grouped split + Morgan fingerprints                (CPU, ~10 s)
-    eda        data diagnostics -> results/eda/                            (CPU, ~30 s)
+    eda        data diagnostics -> outputs/results/eda/                            (CPU, ~30 s)
     baselines  zero, context mean, kNN, ridge, MLP on fingerprints         (GPU optional, ~3 min)
     probe      frozen Qwen embeddings through the baseline MLP             (GPU, ~10 min)
     llm        Qwen2.5-0.5B regressor (LoRA / all weights / frozen)        (GPU, ~45 min per run)
     gen        Cell2Sentence-style generative variant                      (GPU, ~1.5 h)
-    evaluate   tables, paired tests, plots -> results/report/              (CPU, ~2 min)
+    evaluate   tables, paired tests, plots -> outputs/results/report/              (CPU, ~2 min)
 
 `python main.py <command> --help` lists a command's options; they are defined as dataclasses in
 src/pertpred/utils/arguments.py. Every command module exposes `run(args)`.

@@ -272,7 +272,7 @@ most ranked targets are orderings of noise, and a gene sentence cannot say "noth
 - Corrected two writeup claims after checking them against the tables: val > test is not universal
   (val is easier: 18.5% vs 12.7% active), and 83% (not 87%) of training signatures are inactive.
 - Retrained `qwen_smiles` to completion so every reported number comes from a finished run
-  (interrupted logs kept as `results/logs/qwen_smiles_interrupted.*`). Test centered Pearson 0.0392
+  (interrupted logs kept as `outputs/results/logs/qwen_smiles_interrupted.*`). Test centered Pearson 0.0392
   vs 0.0389 from the interrupted checkpoint, retrieval 0.471 vs 0.466: the shortcut would not have
   changed any conclusion, and the pair doubles as a run-to-run noise estimate for the LLM. With the
   complete run, the name's contribution to retrieval moved from n.s. to borderline
@@ -300,3 +300,6 @@ most ranked targets are orderings of noise, and a gene sentence cannot say "noth
   context-dominated (context mean best of all), revised D8's criterion before the result; the
   generator lost on every metric. Pipeline validated with oracle (0.997) and context-mean (0.142)
   gene lists before writing the conclusion.
+- Workspace reorganized: raw GEO files flattened from `data/raw/` into `data/`; derived data moved
+  from `data/pre-processed/` to `outputs/processed_data/` (git-ignored; must be moved out before
+  `submit`, since it holds checkpoints); results moved from `results/` to `outputs/results/`.

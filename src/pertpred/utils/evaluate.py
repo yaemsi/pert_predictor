@@ -1,7 +1,7 @@
 """Score saved predictions and build the comparison report.
 
 Every model writes predictions for val+test rows via `save_predictions`. `score` turns them into a
-per-signature metric table (kept in results/ so the numbers can be re-aggregated without the model).
+per-signature metric table (kept in outputs/results/ so the numbers can be re-aggregated without the model).
 `python main.py evaluate` builds the final tables and plots from whatever has been scored.
 """
 
