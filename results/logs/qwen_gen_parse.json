@@ -1,0 +1,10 @@
+{
+  "n": 26689,
+  "well_formed_frac": 0.01701075349394882,
+  "missing_section_frac": 0.0,
+  "invalid_symbol_frac": 0.04081611093965642,
+  "duplicate_frac": 0.0740948386770606,
+  "mean_valid_up": 22.090074562553863,
+  "mean_valid_down": 21.850350331597287,
+  "distinct_up_lists": 25011
+}

@@ -7,7 +7,9 @@ signal** (0.027 vs 0.055). Both are far above every compound-agnostic predictor,
 version of the same LLM scores the null (0.001), so the gains come from the compound text, not
 metadata. The bigger result is about measurement: on this data the default metric (per-signature
 Pearson) is saturated by context, and its obvious fix is gameable by predicting nothing; the
-evaluation here is built so that neither shortcut scores.
+evaluation here is built so that neither shortcut scores. A Cell2Sentence-style variant (the same
+LLM *writing* the top-25 up / down genes as text) was also tested and does markedly worse: it learns
+each context's usual genes, blurrily, and almost nothing about the compound (centered Pearson 0.003).
 
 ## 1. Framing
 
@@ -68,7 +70,7 @@ Pitfalls found, in the order they changed the plan:
 | `centered_pearson` (headline) | Within one cell x time x dose context, does the prediction say how *this* compound differs from the others? (centre predictions and observations per context, then correlate) | exactly 0 |
 | `retrieval` (headline) | Given the observed signature, is this compound's prediction closer to it than other compounds' predictions in the same context? (0 = first, 0.5 = chance) | exactly 0.5 |
 | `pearson` | conventional per-signature correlation | 0.20 (context mean) |
-| `topk_dir` | overlap of predicted vs observed top-50 up and top-50 down genes (a CMap-style query) | 0.155 (context mean) |
+| `topk_dir` / `topk25_dir` | overlap of predicted vs observed top-50 (top-25) up and down genes (a CMap-style query) | 0.155 / 0.140 (context mean) — the best of any model: gene-set overlap is context-dominated too |
 | `rmse` | magnitude calibration | 1.124 (context mean) |
 
 Both headline metrics are exactly null for any model that ignores the compound — this is checked
@@ -108,6 +110,16 @@ SMILES line), `qwen_ctx` (no compound at all: a leakage check that must score th
 `qwen_allweights` (full fine-tuning of all 494.9M weights instead of LoRA, learning rate 2e-5) to
 test whether more adaptation capacity helps.
 
+**Generative variant, Cell2Sentence-style** (`gen.py`, run `qwen_gen`; DECISIONS D8). CellType's own
+method writes expression as text and has an LLM generate it. Same prompt, split, model and LoRA as
+`qwen_main`, but trained with next-token loss to *write* the response:
+`up: <25 genes, most up first>` / `down: <25 genes, most down first>`. Greedy decoding; a tolerant
+parser drops unknown symbols and repeats and leaves missing sections empty (rates reported); the
+parsed lists become a 978-vector (listed genes get the training-average z for their rank, the rest
+the context mean) so the variant is scored like every other model. Checkpoint chosen by val token
+loss. The parse-and-score path was checked end to end: feeding the *true* gene lists through it gives
+top-25 overlap 0.997, and the context mean's own top genes give 0.142 (its direct score: 0.140).
+
 ## 5. Results
 
 Test set: 264 compound groups, 15,231 signatures. Compound-level mean with 95% bootstrap CI over
@@ -128,6 +140,7 @@ Full table with every metric and every probe variant: `results/report/summary_te
 | qwen_smiles | 0.039 [0.028, 0.050] | 0.471 [0.453, 0.489] | 0.010 | 0.453 | 0.194 |
 | qwen_name | 0.031 [0.022, 0.039] | 0.468 [0.448, 0.488] | -0.005 | 0.459 | 0.174 |
 | qwen_allweights (full fine-tuning) | 0.040 [0.029, 0.051] | 0.456 [0.436, 0.477] | 0.021 | 0.442 | 0.184 |
+| qwen_gen (generative, C2S-style) | 0.003 [0.001, 0.004] | 0.493 [0.485, 0.501] | 0.006 | 0.475 | 0.117 |
 
 ![models](results/report/models_test.png)
 
@@ -145,6 +158,8 @@ negative retrieval = better):
 | qwen_allweights - qwen_main (full vs LoRA) | -0.005 [-0.013, +0.002] | +0.007 [-0.010, +0.024] |
 | qwen_allweights - frozen probe | +0.001 [-0.010, +0.010] | -0.013 [-0.034, +0.009] |
 | qwen_allweights - mlp_fp | -0.014 [-0.027, -0.001] | +0.014 [-0.012, +0.039] |
+| qwen_gen - qwen_main (generate vs regress) | -0.042 [-0.054, -0.031] | +0.044 [+0.022, +0.066] |
+| qwen_gen - context_mean | +0.003 [+0.001, +0.004] | -0.007 [-0.016, +0.001] |
 
 Training-seed spread of `mlp_fp` (4 seeds): `centered_pearson` 0.049–0.053, retrieval 0.444–0.450.
 LLM runs are single-seed (see caveats).
@@ -168,6 +183,17 @@ LLM runs are single-seed (see caveats).
    but the differences are within noise; LoRA's gain over frozen shows mainly in retrieval
    (-0.020 [-0.040, 0.000]). Full fine-tuning overfits: val peaked at epoch 2 and declined while
    training loss kept falling, and it ends significantly below `mlp_fp`.
+
+5. *Would writing gene sentences (Cell2Sentence-style) do better?* No, and not narrowly. On its own
+   native metric, top-25 gene overlap, the generator scores 0.095 — below the regression model
+   (0.128; -0.033 [-0.038, -0.028]) and below simply writing each context's usual genes
+   (`context_mean` 0.140; -0.045 [-0.046, -0.043]). It almost never writes a malformed answer
+   (both sections present in 100% of outputs, 4% invented gene names, 7% repeats, ~22 valid genes
+   per list), so the failure is content, not format. Its lists overlap 0.195 with each context's
+   usual top genes but only 0.075 with the truth: it learned a blurry "what tends to move in this cell
+   line at this dose", and writes near-identical lists for a compound at 0.04 and 0.12 µM even though
+   those true signatures are noise. With 83% of training targets indistinguishable from vehicle, most
+   gene sentences it trained on are random orderings — the cost D5 predicted for a ranked-text target.
 
 **Knowing *whether* vs knowing *what*.** `centered_pearson` mixes two abilities: ranking compounds by
 how strongly they act, and getting the direction of the response right. Scoring predicted response
@@ -215,6 +241,9 @@ low-dose signatures being inactive.
 - **Small cell lines.** iPSC-derived and primary lines (NEU, NPC, ASC, SKL; 28–32 test compounds
   each) land between -0.03 and +0.05 with no consistent winner and wide intervals; the overall
   numbers are driven by the 7 core lines.
+- **Generation commits to noise.** The C2S-style variant writes a confident, plausible gene list for
+  every condition, including low-dose signatures that are pure noise, and its lists are dominated by
+  context-typical genes. A ranked-text target has no way to say "nothing happens here".
 - **Not checked by mechanism of action.** The supplied tables carry no MOA labels (only 10 of
   1,796 compound names state a mechanism, e.g. `GSK-3-inhibitor-II`). Public MOA annotations exist,
   but joining them onto test compounds would cross the no-external-lookup boundary, so a model could
@@ -244,6 +273,8 @@ not scaffold.
 | hypothesis: "LLM knows *whether* not *what*" | half wrong: it knows *whether* as well as FP | reported as a direction gap, not an activity gap |
 | drug-free control at 2 epochs | null, but shorter than the other ablations | rerun at 6 epochs: still null (0.001, explained by exact dose) |
 | LoRA rather than full fine-tuning (argued) | full fine-tuning run: overfits by epoch 2, ties LoRA | LoRA choice now backed by a measurement |
+| regression head rather than generation (argued, D5) | the assignment comes from the Cell2Sentence team, so tested a C2S-style generator | it loses on every metric, including its native top-25 overlap (D8) |
+| D8 success criterion "beat the regression model on top-25 overlap" | rescoring showed `context_mean` has the best top-25 overlap of all models | criterion revised *before* the generative result: must beat the context mean there |
 
 ## 8. What I would do next
 
@@ -257,5 +288,7 @@ not scaffold.
    the active stratum where the LLM is weakest.
 4. **Ask the model a smaller question.** Separate "will it act?" (a classifier, where the LLM is at
    parity) from "what will it do?" (regression on active signatures only), and evaluate each on its own.
-5. **A generative baseline for completeness.** Emit ranked up/down gene symbols and compare on
-   `topk_dir`, to test the choice of a regression head (D5) directly rather than by argument.
+5. **Give generation a fair second chance** (it lost here, D8): train only on active signatures so
+   targets are not mostly noise, let the model emit an explicit "no response" token for inert
+   conditions, and decode constrained to the 978 landmark symbols (removes invented names and
+   repeats). These address the three failure causes observed, in order of expected impact.

@@ -15,7 +15,8 @@ Qwen2.5-0.5B, against strong non-LLM baselines.
 On 264 held-out compounds, Qwen2.5-0.5B with LoRA reading the condition as text reaches centered
 Pearson 0.045 and retrieval rank 0.449 (0.5 = chance), statistically tied with an MLP on Morgan
 fingerprints (0.054 / 0.442) and weaker on signatures with real signal. A context-only version of
-the same model scores the null (0.001), so the gain comes from the compound text. Details, failure
+the same model scores the null (0.001), so the gain comes from the compound text. A Cell2Sentence-style
+variant that *writes* the top-25 up / down genes as text does markedly worse (centered Pearson 0.003). Details, failure
 modes and next steps in [`WRITEUP.md`](WRITEUP.md); headline figure `results/report/models_test.png`.
 
 ## Task in one paragraph
@@ -55,6 +56,8 @@ uv run python -m pertpred.eda         # data diagnostics -> results/eda/        
 uv run python -m pertpred.baselines   # zero, context mean, kNN, ridge, MLP             (~3 min, GPU optional)
 uv run python -m pertpred.probe       # frozen Qwen embeddings -> same MLP              (~15 min, GPU)
 bash scripts/llm_runs.sh queue        # main LoRA model + 3 ablations                   (~3 h, GPU)
+bash scripts/llm_runs.sh queue2       # 6-epoch drug-free control + full fine-tuning    (~1.5 h, GPU)
+bash scripts/llm_runs.sh qwen_gen     # Cell2Sentence-style generative variant         (~1.5 h, GPU)
 uv run python -m pertpred.evaluate    # tables, paired tests, plots -> results/report/  (~2 min)
 ```
 
@@ -106,4 +109,5 @@ needs Level 3 decompressed into `data/pre-processed/level3.gctx` and is skipped 
 | `src/pertpred/baselines.py` | non-LLM baselines |
 | `src/pertpred/probe.py` | frozen-Qwen embeddings through the baseline MLP |
 | `src/pertpred/llm.py` | Qwen LoRA regressor: serialization, training, inference |
+| `src/pertpred/gen.py` | Cell2Sentence-style generative variant: gene-sentence targets, generation, parsing |
 | `src/pertpred/eda.py` | diagnostics that shaped the evaluation |

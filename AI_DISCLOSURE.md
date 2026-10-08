@@ -45,6 +45,11 @@ code I read line by line, and anything I changed after review._
 - After a machine shutdown interrupted one ablation, the AI first scored its saved best-on-val
   checkpoint (`--eval-only`) instead of retraining. I asked for the run to be completed instead; the
   complete run matched the shortcut (0.0392 vs 0.0389) and is what the writeup reports.
+- The first success criterion for the generative variant (beat the regression model on top-25
+  overlap) — rejected before the result existed, once rescoring showed top-k overlap is
+  context-dominated; replaced by "beat the context mean on top-25 overlap, or the regression model on
+  compound-specific metrics". The generative scoring path was validated with oracle inputs before its
+  (negative) result was written up.
 
 ## External data
 

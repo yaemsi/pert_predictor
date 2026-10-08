@@ -1,5 +1,6 @@
 |                          |   within-context AUROC (active | predicted strength) |
 |:-------------------------|-----------------------------------------------------:|
+| qwen_gen                 |                                                0.490 |
 | qwen_ctx_2ep             |                                                0.494 |
 | context_mean             |                                                0.500 |
 | zero                     |                                                0.500 |

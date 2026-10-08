@@ -221,7 +221,15 @@ context-dominated like raw Pearson: `context_mean` has the best `topk25_dir` of 
 0.128 for `qwen_main`, 0.122 for `mlp_fp`; chance 0.026). A generator that only learned each
 context's usual top genes would have "won" under the first criterion without using the compound.
 
-**Outcome.** _(filled in after the run)_
+**Outcome (D5 stands, now measured).** `qwen_gen` (test): `centered_pearson` 0.003, retrieval 0.493,
+`topk25_dir` 0.095. Against `qwen_main`: -0.042 [-0.054, -0.031] centered Pearson, +0.044 retrieval
+(worse), -0.033 top-25 overlap. Against `context_mean` on top-25 overlap: -0.045 [-0.046, -0.043].
+Neither "wrong if" condition is met. The pipeline was checked before concluding: true gene lists
+through the same parse-and-score path give 0.997, context-mean lists 0.142. Formatting is not the
+problem (both sections present in every output; 4% invented symbols, 7% repeats); content is. The
+generator's lists track each context's usual genes (overlap 0.195) rather than the truth (0.075), and
+are near-identical across doses whose true signatures are noise. This is the failure D5 anticipated:
+most ranked targets are orderings of noise, and a gene sentence cannot say "nothing happens".
 
 ---
 
@@ -287,3 +295,8 @@ context's usual top genes would have "won" under the first criterion without usi
   and predictions vary only along exact dose (zero spread within an exact dose).
 - Full fine-tuning (`qwen_allweights`): ties LoRA, overfits from epoch 2 (D5 outcome updated).
 - Added D7 (no scVI / pretrained chemCPA).
+- D8: built and ran a Cell2Sentence-style generator after learning the assignment comes from the
+  Cell2Sentence team. Added `topk25_dir` and rescored every model; found top-k overlap is
+  context-dominated (context mean best of all), revised D8's criterion before the result; the
+  generator lost on every metric. Pipeline validated with oracle (0.997) and context-mean (0.142)
+  gene lists before writing the conclusion.
