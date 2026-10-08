@@ -1,6 +1,6 @@
 """Load LINCS L1000 Phase II (GSE70138) Level 5 signatures restricted to the 978 landmark genes.
 
-Run once: `python -m pertpred.data` decompresses the Level 5 gctx into the cache, extracts the
+Run once: `python main.py prepare` decompresses the Level 5 gctx into the cache, extracts the
 landmark columns, and writes an aligned (signature metadata, z-matrix) pair.
 """
 
@@ -11,7 +11,7 @@ import h5py
 import numpy as np
 import pandas as pd
 
-from pertpred import config as C
+from pertpred.utils import config as C
 
 
 def _read_tsv(path) -> pd.DataFrame:
@@ -124,5 +124,5 @@ def load_signatures(mmap: bool = True) -> tuple[pd.DataFrame, np.ndarray, pd.Dat
     return sigs, Y, genes
 
 
-if __name__ == "__main__":
+def run(args=None) -> None:
     extract_landmarks()

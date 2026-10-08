@@ -8,17 +8,21 @@
 - mlp_fp:        context mean + MLP on Morgan bits with learned cell / time / dose embeddings. Same
                  information as the LLM's SMILES channel, no language-model prior.
 
-Run: `python -m pertpred.baselines`
+Run: `python main.py baselines` (`--seed-variance` for the mlp_fp seed spread)
 """
+
+import json
 
 import numpy as np
 import pandas as pd
 import torch
 from sklearn.linear_model import Ridge
 
-from pertpred import config as C
-from pertpred.evaluate import save_predictions, score_split, val_selection_score
-from pertpred.task import Task, as_str, context_key, fit_context_mean, load_task
+from pertpred.data.task import Task, as_str, context_key, fit_context_mean, load_task
+from pertpred.utils import config as C
+from pertpred.utils.arguments import BaselineArgs
+from pertpred.utils.evaluate import save_predictions, score_split, val_selection_score
+from pertpred.utils.metrics import per_signature_metrics, summarize
 
 
 def load_fps(meta: pd.DataFrame) -> np.ndarray:
@@ -186,9 +190,10 @@ def run_tuned(name, task, mu, preds_by_param: dict, q: np.ndarray, log: dict) ->
         score_split(name, task, mu, q, preds_by_param[best], split)
 
 
-def main() -> None:
-    import json
-
+def run(args: BaselineArgs) -> None:
+    if args.seed_variance:
+        mlp_seed_variance(epochs=args.mlp_epochs)
+        return
     task = load_task()
     _, mu = fit_context_mean(task)
     q = np.concatenate([task.idx("val"), task.idx("test")])
@@ -202,10 +207,10 @@ def main() -> None:
         for split in ("val", "test"):
             score_split(name, task, mu, q, pred, split)
 
-    run_tuned("knn_tanimoto", task, mu, knn_predict(task, mu, q, ks=[1, 3, 5, 10, 20, 50]), q, log)
-    run_tuned("ridge_fp", task, mu, ridge_predict(task, mu, q, alphas=[10.0, 100.0, 1000.0, 10000.0]), q, log)
+    run_tuned("knn_tanimoto", task, mu, knn_predict(task, mu, q, ks=list(args.knn_ks)), q, log)
+    run_tuned("ridge_fp", task, mu, ridge_predict(task, mu, q, alphas=list(args.ridge_alphas)), q, log)
 
-    q_mlp, pred_mlp, curve = mlp_predict(task, mu)
+    q_mlp, pred_mlp, curve = mlp_predict(task, mu, epochs=args.mlp_epochs, seed=args.seed)
     assert (q_mlp == q).all()
     log["mlp_fp"] = {"val_curve": curve, "chosen_epoch": int(np.argmax(curve)) + 1}
     save_predictions("mlp_fp", q, pred_mlp)
@@ -216,21 +221,13 @@ def main() -> None:
     (C.RESULTS_DIR / "logs" / "baselines_tuning.json").write_text(json.dumps(log, indent=2))
 
 
-if __name__ == "__main__":
-    main()
-
-
-def mlp_seed_variance(seeds=(1, 2, 3, 4)) -> None:
+def mlp_seed_variance(seeds=(1, 2, 3, 4), epochs: int = 40) -> None:
     """Training-run variance of mlp_fp (bootstrap CIs only cover test-set sampling, not this)."""
-    import json
-
-    from pertpred.metrics import per_signature_metrics, summarize
-
     task = load_task()
     _, mu = fit_context_mean(task)
     out = {}
     for seed in seeds:
-        q, pred, _ = mlp_predict(task, mu, seed=seed)
+        q, pred, _ = mlp_predict(task, mu, epochs=epochs, seed=seed)
         te = task.meta["split"].to_numpy()[q] == "test"
         s = summarize(per_signature_metrics(pred[te], task.Y[q[te]], mu[q[te]], task.meta.iloc[q[te]]), n_boot=1)
         out[seed] = {m: float(s.loc[m, "mean"]) for m in ("centered_pearson", "retrieval", "pearson")}

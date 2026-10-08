@@ -5,8 +5,8 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from pertpred import config as C
-from pertpred.data import load_signatures
+from pertpred.data.load import load_signatures
+from pertpred.utils import config as C
 
 
 @dataclass

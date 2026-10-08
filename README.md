@@ -50,15 +50,15 @@ If `data/` is read-only on the cluster, point `PERTPRED_CACHE` at a writable pat
 ## Reproduce
 
 ```bash
-uv run python -m pertpred.data        # decompress Level 5, extract 978 landmarks       (~2 min, CPU)
-uv run python -m pertpred.split       # compound-grouped split, Morgan fingerprints     (~10 s)
-uv run python -m pertpred.eda         # data diagnostics -> results/eda/                (~30 s)
-uv run python -m pertpred.baselines   # zero, context mean, kNN, ridge, MLP             (~3 min, GPU optional)
-uv run python -m pertpred.probe       # frozen Qwen embeddings -> same MLP              (~15 min, GPU)
+uv run python main.py prepare        # decompress Level 5, extract 978 landmarks       (~2 min, CPU)
+uv run python main.py split          # compound-grouped split, Morgan fingerprints     (~10 s)
+uv run python main.py eda            # data diagnostics -> results/eda/                (~30 s)
+uv run python main.py baselines      # zero, context mean, kNN, ridge, MLP             (~3 min, GPU optional)
+uv run python main.py probe          # frozen Qwen embeddings -> same MLP              (~10 min, GPU)
 bash scripts/llm_runs.sh queue        # main LoRA model + 3 ablations                   (~3 h, GPU)
 bash scripts/llm_runs.sh queue2       # 6-epoch drug-free control + full fine-tuning    (~1.5 h, GPU)
 bash scripts/llm_runs.sh qwen_gen     # Cell2Sentence-style generative variant         (~1.5 h, GPU)
-uv run python -m pertpred.evaluate    # tables, paired tests, plots -> results/report/  (~2 min)
+uv run python main.py evaluate       # tables, paired tests, plots -> results/report/  (~2 min)
 ```
 
 The exact LLM runs behind the reported numbers are listed, with their command lines, in
@@ -68,7 +68,7 @@ The exact LLM runs behind the reported numbers are listed, with their command li
 On the remote workspace, wrap any GPU step with the provided launcher, e.g.
 
 ```bash
-gpu submit -- uv run python -m pertpred.llm --run-name qwen_full
+gpu submit -- bash scripts/llm_runs.sh qwen_main
 ```
 
 ## Model
@@ -98,16 +98,21 @@ needs Level 3 decompressed into `data/pre-processed/level3.gctx` and is skipped 
 
 ## Code map
 
-| module | role |
+One entry point, `main.py`; `python main.py <command> --help` lists each command's options.
+
+| path | role |
 |---|---|
-| `src/pertpred/config.py` | paths, constants, pinned model revision |
-| `src/pertpred/data.py` | gctx -> (signature metadata, 978-gene z matrix) |
-| `src/pertpred/split.py` | compound grouping, held-out split, fingerprints, novelty (max Tanimoto to train) |
-| `src/pertpred/task.py` | rows, clipped targets, context-mean offset |
-| `src/pertpred/metrics.py` | per-signature metrics, compound-level aggregation, bootstrap |
-| `src/pertpred/evaluate.py` | DMSO activity threshold, scoring, report tables and plots |
-| `src/pertpred/baselines.py` | non-LLM baselines |
-| `src/pertpred/probe.py` | frozen-Qwen embeddings through the baseline MLP |
-| `src/pertpred/llm.py` | Qwen LoRA regressor: serialization, training, inference |
-| `src/pertpred/gen.py` | Cell2Sentence-style generative variant: gene-sentence targets, generation, parsing |
-| `src/pertpred/eda.py` | diagnostics that shaped the evaluation |
+| `main.py` | the only entry point: parses `<command> [--options]` and calls the command module's `run(args)` |
+| `src/pertpred/utils/arguments.py` | every command's options as dataclasses (`SplitArgs`, `BaselineArgs`, `ProbeArgs`, `LLMArgs`, `GenArgs`, `EvalArgs`) |
+| `src/pertpred/utils/config.py` | paths, constants, pinned model revision |
+| `src/pertpred/utils/metrics.py` | per-signature metrics, compound-level aggregation, bootstrap |
+| `src/pertpred/utils/evaluate.py` | DMSO activity threshold, scoring, report tables and plots (`evaluate`) |
+| `src/pertpred/utils/plotstyle.py` | shared plot styling |
+| `src/pertpred/data/load.py` | gctx -> (signature metadata, 978-gene z matrix) (`prepare`) |
+| `src/pertpred/data/split.py` | compound grouping, held-out split, fingerprints, novelty (`split`) |
+| `src/pertpred/data/task.py` | rows, clipped targets, context-mean offset |
+| `src/pertpred/data/eda.py` | diagnostics that shaped the evaluation (`eda`) |
+| `src/pertpred/models/baselines.py` | non-LLM baselines (`baselines`) |
+| `src/pertpred/models/probe.py` | frozen-Qwen embeddings through the baseline MLP (`probe`) |
+| `src/pertpred/models/llm.py` | Qwen regressor: serialization, training, inference (`llm`) |
+| `src/pertpred/models/gen.py` | Cell2Sentence-style generative variant: gene-sentence targets, generation, parsing (`gen`) |

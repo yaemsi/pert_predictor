@@ -2,7 +2,7 @@
 
 Every model writes predictions for val+test rows via `save_predictions`. `score` turns them into a
 per-signature metric table (kept in results/ so the numbers can be re-aggregated without the model).
-`python -m pertpred.evaluate` builds the final tables and plots from whatever has been scored.
+`python main.py evaluate` builds the final tables and plots from whatever has been scored.
 """
 
 import functools
@@ -11,10 +11,11 @@ import json
 import numpy as np
 import pandas as pd
 
-from pertpred import config as C
-from pertpred.data import load_signatures
-from pertpred.metrics import METRICS, centered_pearson, paired_difference, per_signature_metrics, summarize
-from pertpred.task import Task, context_key
+from pertpred.data.load import load_signatures
+from pertpred.data.task import Task, context_key
+from pertpred.utils import config as C
+from pertpred.utils.arguments import EvalArgs
+from pertpred.utils.metrics import METRICS, centered_pearson, paired_difference, per_signature_metrics, summarize
 
 PER_SIG_DIR = C.RESULTS_DIR / "per_signature"
 
@@ -86,7 +87,7 @@ def val_selection_score(task: Task, mu: np.ndarray, idx: np.ndarray, pred: np.nd
 
 def rescore_all() -> None:
     """Recompute every per-signature table from saved predictions (e.g. after adding a metric)."""
-    from pertpred.task import fit_context_mean, load_task
+    from pertpred.data.task import fit_context_mean, load_task
 
     task = load_task()
     _, mu = fit_context_mean(task)
@@ -159,7 +160,7 @@ def _activity_auroc(names: list[str], out_dir, split: str) -> None:
     "predicts activity" from "predicts which genes move", which centered_pearson mixes together."""
     from sklearn.metrics import roc_auc_score
 
-    from pertpred.task import fit_context_mean, load_task
+    from pertpred.data.task import fit_context_mean, load_task
 
     task = load_task()
     _, mu = fit_context_mean(task)
@@ -171,6 +172,9 @@ def _activity_auroc(names: list[str], out_dir, split: str) -> None:
         if not (C.PRED_DIR / f"{name}.npz").exists():
             continue
         idx, pred = load_predictions(name)
+        if not np.isin(rows, idx).all():  # e.g. a smoke run that only generated a subset
+            print(f"activity AUROC: skipping {name} (predictions cover only part of {split})")
+            continue
         pos = pd.Series(np.arange(len(idx)), index=idx).loc[rows].to_numpy()
         strength = np.linalg.norm(pred[pos] - mu[rows], axis=1)
         aucs, w = [], []
@@ -202,7 +206,7 @@ def _ordered(names) -> list[str]:
 
 def _plot_summary(tables: dict[str, pd.DataFrame], out_dir, split: str) -> None:
     """Dot + 95% CI per model for the two compound-specific metrics, all signatures and active only."""
-    from pertpred.plotstyle import INK2, NEUTRAL, SERIES, plt, setup
+    from pertpred.utils.plotstyle import INK2, NEUTRAL, SERIES, plt, setup
 
     setup()
     names, ypos, group_rows, y = [], [], [], 0.0
@@ -245,7 +249,7 @@ def _plot_summary(tables: dict[str, pd.DataFrame], out_dir, split: str) -> None:
 
 def _plot_similarity(strata: pd.DataFrame, out_dir, split: str) -> None:
     """centered_pearson vs similarity of the test compound to its nearest training compound."""
-    from pertpred.plotstyle import SERIES, plt, setup
+    from pertpred.utils.plotstyle import SERIES, plt, setup
 
     setup()
     order = ["<=0.3", "0.3-0.4", "0.4-0.5", "0.5-0.7", ">0.7"]
@@ -299,14 +303,7 @@ def _strata(tables: dict[str, pd.DataFrame], out_dir, split: str) -> pd.DataFram
     return strata
 
 
-if __name__ == "__main__":
-    import argparse
-
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--split", default="test")
-    ap.add_argument("--reference", default="mlp_fp", help="model every other model is paired against")
-    ap.add_argument("--rescore", action="store_true", help="recompute all per-signature tables first")
-    a = ap.parse_args()
-    if a.rescore:
+def run(args: EvalArgs) -> None:
+    if args.rescore:
         rescore_all()
-    report(a.split, a.reference)
+    report(args.split, args.reference)

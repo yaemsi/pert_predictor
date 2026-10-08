@@ -3,7 +3,7 @@
 import os
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]  # src/pertpred/utils/config.py -> repo
 
 # Raw GEO files (read-only in the remote workspace).
 DATA_DIR = Path(os.environ.get("PERTPRED_DATA", REPO_ROOT / "data" / "raw"))

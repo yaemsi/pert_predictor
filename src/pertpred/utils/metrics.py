@@ -25,7 +25,7 @@ Metric menu (why each one exists):
 import numpy as np
 import pandas as pd
 
-from pertpred.task import context_key
+from pertpred.data.task import context_key
 
 
 def rowwise_pearson(a: np.ndarray, b: np.ndarray) -> np.ndarray:

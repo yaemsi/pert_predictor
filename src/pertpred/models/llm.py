@@ -8,23 +8,23 @@ The head is zero-initialized, so before any training the model *is* the context-
 every gain has to come from what the backbone extracts from the text. Fields can be dropped from the
 prompt (`--fields`) to ablate which channel carries the signal.
 
-Run (GPU): `python -m pertpred.llm --run-name qwen_full`
+Run (GPU): `python main.py llm --run-name qwen_main --pool mean --epochs 6` (options: utils/arguments.py LLMArgs)
 """
 
-import argparse
+import dataclasses
 import json
 import math
 import time
 
 import numpy as np
-import pandas as pd
 import torch
 from peft import LoraConfig, get_peft_model
 from transformers import AutoConfig, AutoModel, AutoTokenizer
 
-from pertpred import config as C
-from pertpred.evaluate import save_predictions, score_split, val_selection_score
-from pertpred.task import Task, fit_context_mean, load_task
+from pertpred.data.task import Task, fit_context_mean, load_task
+from pertpred.utils import config as C
+from pertpred.utils.arguments import LLMArgs
+from pertpred.utils.evaluate import save_predictions, score_split, val_selection_score
 
 ALL_FIELDS = ("cell", "time", "dose", "name", "smiles")
 
@@ -152,7 +152,7 @@ def predict_residual(model, batcher, rows: np.ndarray, device, bs: int = 256) ->
     return out
 
 
-def train(args) -> None:
+def run(args: LLMArgs) -> None:
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -195,7 +195,7 @@ def train(args) -> None:
     # --eval-only appends to an existing run's log (keeping its training curve) and skips training:
     # it scores the best-on-val checkpoint saved so far, e.g. after a run was interrupted.
     log_f = open(log_dir / f"{args.run_name}.jsonl", "a" if args.eval_only else "w")
-    log_f.write(json.dumps({"config": vars(args), "n_train_rows": int(len(tr)), "trainable_params": n_train}) + "\n")
+    log_f.write(json.dumps({"config": dataclasses.asdict(args), "n_train_rows": int(len(tr)), "trainable_params": n_train}) + "\n")
     ckpt = C.CKPT_DIR / f"{args.run_name}.pt"
     C.CKPT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -248,28 +248,3 @@ def train(args) -> None:
         score_split(args.run_name, task, mu, q, pred, split)
     log_f.write(json.dumps({"best_step": state["step"], "best_val_centered_pearson": state["val"], "minutes": (time.time() - t0) / 60}) + "\n")
     log_f.close()
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--run-name", required=True)
-    ap.add_argument("--fields", default=",".join(ALL_FIELDS))
-    ap.add_argument("--mode", choices=["lora", "frozen", "full"], default="lora")
-    ap.add_argument("--init", choices=["pretrained", "random"], default="pretrained")
-    ap.add_argument("--lora-r", type=int, default=16)
-    ap.add_argument("--pool", choices=["eos", "mean"], default="eos")
-    ap.add_argument("--n-layers", type=int, default=0, help="truncate the backbone to its first N blocks (0 = all 24)")
-    ap.add_argument("--epochs", type=int, default=2)
-    ap.add_argument("--batch-size", type=int, default=64)
-    ap.add_argument("--max-tokens", type=int, default=6144, help="padded-token cap per micro-batch (memory)")
-    ap.add_argument("--lr", type=float, default=2e-4)
-    ap.add_argument("--head-lr", type=float, default=1e-3)
-    ap.add_argument("--eval-every-epochs", type=float, default=0.25)
-    ap.add_argument("--max-train-rows", type=int, default=0, help="subsample train rows (smoke tests)")
-    ap.add_argument("--eval-only", action="store_true", help="skip training; score the run's saved best-on-val checkpoint")
-    ap.add_argument("--seed", type=int, default=C.SEED)
-    train(ap.parse_args())
-
-
-if __name__ == "__main__":
-    main()

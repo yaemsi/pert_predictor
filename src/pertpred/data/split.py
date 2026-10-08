@@ -6,7 +6,7 @@ unit of splitting is the compound, not the signature. Different pert_ids can be 
 two pert_ids share a group if they share an InChIKey skeleton (first 14 chars, i.e. connectivity
 without stereo/protonation) or a non-BRD common name. Groups are then split ~75/10/15.
 
-Run: `python -m pertpred.split`
+Run: `python main.py split`
 """
 
 import numpy as np
@@ -14,13 +14,13 @@ import pandas as pd
 from rdkit import Chem, DataStructs, RDLogger
 from rdkit.Chem import rdFingerprintGenerator
 
-from pertpred import config as C
-from pertpred.data import load_cell_info, load_pert_info, load_signatures
+from pertpred.data.load import load_cell_info, load_pert_info, load_signatures
+from pertpred.utils import config as C
+from pertpred.utils.arguments import SplitArgs
 
 RDLogger.DisableLog("rdApp.*")
 
 FP_BITS = 2048
-SPLIT_FRACS = {"train": 0.75, "val": 0.10, "test": 0.15}
 PLATE_CONTROLS = ("bortezomib", "MG-132")
 
 
@@ -67,12 +67,12 @@ def compound_table(sigs: pd.DataFrame) -> pd.DataFrame:
     return pert.reset_index(drop=True)
 
 
-def assign_split(pert: pd.DataFrame, seed: int = C.SEED) -> pd.Series:
+def assign_split(pert: pd.DataFrame, val_frac: float, test_frac: float, seed: int) -> pd.Series:
     groups = np.sort(pert["group_id"].unique())
     rng = np.random.default_rng(seed)
     rng.shuffle(groups)
-    n_test = round(len(groups) * SPLIT_FRACS["test"])
-    n_val = round(len(groups) * SPLIT_FRACS["val"])
+    n_test = round(len(groups) * test_frac)
+    n_val = round(len(groups) * val_frac)
     split_of = {g: "test" for g in groups[:n_test]}
     split_of |= {g: "val" for g in groups[n_test : n_test + n_val]}
     split_of |= {g: "train" for g in groups[n_test + n_val :]}
@@ -92,10 +92,10 @@ def max_tanimoto_to_train(pert: pd.DataFrame) -> pd.Series:
     return pd.Series(out, index=pert.index)
 
 
-def build() -> None:
+def run(args: SplitArgs) -> None:
     sigs, _, _ = load_signatures()
     pert = compound_table(sigs)
-    pert["split"] = assign_split(pert)
+    pert["split"] = assign_split(pert, args.val_frac, args.test_frac, args.seed)
     pert["max_tani_train"] = max_tanimoto_to_train(pert)
 
     fps = np.zeros((len(pert), FP_BITS), dtype=np.uint8)
@@ -129,6 +129,3 @@ def build() -> None:
     print("merged pert_ids into groups:", len(pert) - pert["group_id"].nunique())
     print(pert.groupby("split")["max_tani_train"].describe())
 
-
-if __name__ == "__main__":
-    build()

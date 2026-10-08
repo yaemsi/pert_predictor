@@ -16,10 +16,10 @@ up-rank r gets the training-average z-score of the r-th most up-regulated gene (
 
 Checkpoints are chosen by val token loss: generating val at every evaluation would be too slow.
 
-Run (GPU): `python -m pertpred.gen --run-name qwen_gen`
+Run (GPU): `python main.py gen --run-name qwen_gen` (options: utils/arguments.py GenArgs)
 """
 
-import argparse
+import dataclasses
 import json
 import math
 import re
@@ -31,11 +31,12 @@ import torch
 from peft import LoraConfig, get_peft_model
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from pertpred import config as C
-from pertpred.data import load_signatures
-from pertpred.evaluate import save_predictions, score_split
-from pertpred.llm import ALL_FIELDS, length_grouped_batches, micro_batches, serialize
-from pertpred.task import fit_context_mean, load_task
+from pertpred.data.load import load_signatures
+from pertpred.data.task import fit_context_mean, load_task
+from pertpred.models.llm import ALL_FIELDS, length_grouped_batches, micro_batches, serialize
+from pertpred.utils import config as C
+from pertpred.utils.arguments import GenArgs
+from pertpred.utils.evaluate import save_predictions, score_split
 
 K = 25
 RESPONSE = "\nresponse:\n"
@@ -163,7 +164,7 @@ def generate(model, tok, prompts: list[str], device, max_new: int, bs: int) -> l
 # ------------------------------------------------------------------ main
 
 
-def run(args) -> None:
+def run(args: GenArgs) -> None:
     torch.manual_seed(args.seed)
     rng = np.random.default_rng(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -210,7 +211,7 @@ def run(args) -> None:
     ckpt = C.CKPT_DIR / f"{args.run_name}.pt"
     C.CKPT_DIR.mkdir(parents=True, exist_ok=True)
     log_f = open(log_dir / f"{args.run_name}.jsonl", "a" if args.eval_only else "w")
-    log_f.write(json.dumps({"config": vars(args), "n_train_rows": int(len(tr)), "K": K}) + "\n")
+    log_f.write(json.dumps({"config": dataclasses.asdict(args), "n_train_rows": int(len(tr)), "K": K}) + "\n")
 
     t0 = time.time()
     if not args.eval_only:
@@ -303,25 +304,3 @@ def run(args) -> None:
     log_f.write(json.dumps({"best_step": state["step"], "best_val_token_loss": state["val_token_loss"],
                             "parse": parse_summary, "minutes": (time.time() - t0) / 60}) + "\n")
     log_f.close()
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--run-name", required=True)
-    ap.add_argument("--epochs", type=int, default=2)
-    ap.add_argument("--batch-size", type=int, default=64)
-    ap.add_argument("--max-tokens", type=int, default=4096, help="padded-token cap per micro-batch (memory)")
-    ap.add_argument("--lr", type=float, default=2e-4)
-    ap.add_argument("--lora-r", type=int, default=16)
-    ap.add_argument("--eval-every-epochs", type=float, default=0.25)
-    ap.add_argument("--val-loss-rows", type=int, default=2000)
-    ap.add_argument("--max-train-rows", type=int, default=0, help="subsample train rows (smoke tests)")
-    ap.add_argument("--gen-limit", type=int, default=0, help="generate only this many val and test rows (smoke tests)")
-    ap.add_argument("--gen-batch", type=int, default=128)
-    ap.add_argument("--eval-only", action="store_true", help="skip training; generate from the saved checkpoint")
-    ap.add_argument("--seed", type=int, default=C.SEED)
-    run(ap.parse_args())
-
-
-if __name__ == "__main__":
-    main()

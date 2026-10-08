@@ -5,7 +5,7 @@
    plates). How well does one measurement predict the other, as a function of signal strength?
 3. How much does the cell x time x dose context explain, in-sample vs on held-out compounds?
 
-Run: `python -m pertpred.eda`
+Run: `python main.py eda`
 """
 
 import json
@@ -13,12 +13,12 @@ import json
 import numpy as np
 import pandas as pd
 
-from pertpred import config as C
-from pertpred.data import load_signatures
-from pertpred.evaluate import activity_flags, dmso_activity_threshold
-from pertpred.metrics import rowwise_pearson
-from pertpred.plotstyle import INK2, NEUTRAL, SERIES, plt, setup
-from pertpred.task import fit_context_mean, load_task
+from pertpred.data.load import load_signatures
+from pertpred.data.task import fit_context_mean, load_task
+from pertpred.utils import config as C
+from pertpred.utils.evaluate import activity_flags, dmso_activity_threshold
+from pertpred.utils.metrics import rowwise_pearson
+from pertpred.utils.plotstyle import INK2, NEUTRAL, SERIES, plt, setup
 
 OUT = C.RESULTS_DIR / "eda"
 
@@ -41,7 +41,7 @@ def _log_ticks(ax, ticks) -> None:
     ax.minorticks_off()
 
 
-def main() -> None:
+def run(args=None) -> None:
     setup()
     OUT.mkdir(parents=True, exist_ok=True)
     task = load_task()
@@ -121,6 +121,3 @@ def main() -> None:
     (OUT / "summary.json").write_text(json.dumps(summary, indent=2, default=float))
     print(json.dumps(summary, indent=2, default=float))
 
-
-if __name__ == "__main__":
-    main()
