@@ -37,5 +37,8 @@ case "${1:?run name}" in
   queue)       for r in qwen_main qwen_smiles qwen_name qwen_ctx; do bash "$0" "$r"; done ;;
   resume)      for r in qwen_smiles_eval qwen_name qwen_ctx; do bash "$0" "$r"; done ;;
   queue2)      for r in qwen_ctx qwen_allweights; do bash "$0" "$r"; done ;;
+  # Cell2Sentence-style generative variant (DECISIONS D8): Qwen + LoRA writes the top-25 up / down
+  # genes as text, next-token loss, greedy decoding, tolerant parser. 2 epochs, val token loss.
+  qwen_gen)    uv run python -m pertpred.gen --run-name qwen_gen --epochs 2 > results/logs/qwen_gen.log 2>&1 ;;
   *) echo "unknown run: $1" >&2; exit 1 ;;
 esac

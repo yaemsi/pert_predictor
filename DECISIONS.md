@@ -184,6 +184,45 @@ ecosystem. (c) A chemCPA checkpoint pretrained on LINCS.
 `centered_pearson` under this compound split — then the disentanglement matters even without
 cross-cell transfer, and the strongest baseline here is understated.
 
+## D8. Test the Cell2Sentence paradigm directly: a generative gene-sentence variant
+
+**Context.** Everything above (D1–D7) was decided before taking into account how the team behind this
+assignment builds its own models. CellType's core method, Cell2Sentence (C2S), writes expression as
+text — gene names ordered by expression — and trains an LLM to generate it. D5 chose the opposite
+(Qwen as an encoder with a regression head) and argued for it, but its "would be wrong if a
+generative variant beats the head" condition was untested. The assignment's own list of open choices
+("decoding, stopping, and how you handle malformed or missing output") also presumes generation.
+
+**Chosen.** Keep the regression model as the main system and add a C2S-style variant on the same
+footing (`gen.py`, run `qwen_gen`): same prompt, same split, same Qwen2.5-0.5B + LoRA r=16, trained
+with next-token loss to write `up: <top-25 genes>` / `down: <top-25 genes>`; greedy decoding; a
+tolerant parser (unknown symbols and repeats dropped, missing sections empty) with the malformed
+rate reported; the parsed lists are turned into a 978-vector (listed genes get the training-average
+z-score for their rank, unlisted genes the context mean) so the variant is scored with the same
+metrics as everything else. A top-25 overlap metric (`topk25_dir`) was added for all models, since
+that is the quantity a gene sentence natively expresses. No C2S checkpoint is used: the assignment
+fixes Qwen2.5-0.5B, and C2S models may have seen perturbation data.
+
+**Alternatives.** (a) Leave D5 argued but untested. (b) Generate full ranked lists of all 978 genes
+(the closest analogue of a C2S cell sentence; ~3,000 tokens per target, too slow here). (c) Rebuild
+the main system around generation.
+
+**Why.** It turns the central design argument into a measurement, in the paradigm the evaluators
+work in, at the cost of one training run. Top-25 lists are the compact, CMap-style form of a
+signature and keep generation tractable.
+
+**Would be wrong if** the generative variant beats the regression model on the compound-specific
+metrics (`centered_pearson`, `retrieval`), or beats the *context mean* on `topk25_dir` — then D5's
+argument about ordering noise was wrong and generation should be the main approach.
+
+_Criterion revised before the generative result existed._ The first version said "beats the
+regression model on `topk25_dir`". Rescoring every existing model showed that top-k overlap is
+context-dominated like raw Pearson: `context_mean` has the best `topk25_dir` of all models (0.140 vs
+0.128 for `qwen_main`, 0.122 for `mlp_fp`; chance 0.026). A generator that only learned each
+context's usual top genes would have "won" under the first criterion without using the compound.
+
+**Outcome.** _(filled in after the run)_
+
 ---
 
 ## Dated notes

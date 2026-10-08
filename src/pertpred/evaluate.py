@@ -84,6 +84,18 @@ def val_selection_score(task: Task, mu: np.ndarray, idx: np.ndarray, pred: np.nd
     return float(pd.Series(r).groupby(meta["group_id"].to_numpy()).mean().mean())
 
 
+def rescore_all() -> None:
+    """Recompute every per-signature table from saved predictions (e.g. after adding a metric)."""
+    from pertpred.task import fit_context_mean, load_task
+
+    task = load_task()
+    _, mu = fit_context_mean(task)
+    for p in sorted(C.PRED_DIR.glob("*.npz")):
+        idx, pred = load_predictions(p.stem)
+        for split in ("val", "test"):
+            score_split(p.stem, task, mu, idx, pred, split)
+
+
 # ---------------------------------------------------------------- report
 
 
@@ -179,6 +191,7 @@ PLOT_GROUPS = [
     ("baselines", ["zero", "context_mean", "knn_tanimoto", "ridge_fp", "mlp_fp"]),
     ("frozen Qwen + MLP", ["probe_name+smiles_mean24", "probe_smiles_mean24", "probe_name_mean24", "probe_fp+qwen_mean24"]),
     ("Qwen fine-tuned", ["qwen_full", "qwen_main", "qwen_allweights", "qwen_smiles", "qwen_name", "qwen_ctx"]),
+    ("Qwen generative (C2S-style)", ["qwen_gen"]),
 ]
 
 
@@ -292,5 +305,8 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="test")
     ap.add_argument("--reference", default="mlp_fp", help="model every other model is paired against")
+    ap.add_argument("--rescore", action="store_true", help="recompute all per-signature tables first")
     a = ap.parse_args()
+    if a.rescore:
+        rescore_all()
     report(a.split, a.reference)

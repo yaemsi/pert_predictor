@@ -18,7 +18,8 @@ Metric menu (why each one exists):
   compound is inert, so (true - mu) points along -mu. See WRITEUP.md.
 - retrieval (headline): inside each test context, rank the right compound's prediction among all
   test compounds' predictions by cosine to the observed residual. 0 = always first, 0.5 = chance.
-- topk_dir: overlap of predicted vs observed top-k up and top-k down genes (a CMap-style query set).
+- topk_dir / topk25_dir: overlap of predicted vs observed top-k up and top-k down genes (k = 50 / 25;
+  a CMap-style query set). k = 25 matches the gene sentences the generative variant writes.
 """
 
 import numpy as np
@@ -119,12 +120,13 @@ def per_signature_metrics(pred: np.ndarray, true: np.ndarray, mu: np.ndarray, me
             "delta_pearson": rowwise_pearson(pred_res, true_res),
             "retrieval": retrieval_percentile(pred_res, true_res, context, meta["group_id"].to_numpy()),
             "topk_dir": topk_direction_overlap(pred, true),
+            "topk25_dir": topk_direction_overlap(pred, true, k=25),
             "rmse": np.sqrt(((pred - true) ** 2).mean(axis=1)),
         }
     )
 
 
-METRICS = ["pearson", "centered_pearson", "delta_pearson", "retrieval", "topk_dir", "rmse"]
+METRICS = ["pearson", "centered_pearson", "delta_pearson", "retrieval", "topk_dir", "topk25_dir", "rmse"]
 
 
 def compound_level(per_sig: pd.DataFrame, by: str = "group_id") -> pd.DataFrame:
