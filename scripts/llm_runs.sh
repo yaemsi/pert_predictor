@@ -28,8 +28,14 @@ case "${1:?run name}" in
                       --eval-only >> results/logs/qwen_smiles.log 2>&1 ;;
   qwen_name)   llm qwen_name "${MAIN[@]}" --fields cell,time,dose,name ;;
   # Leakage check: no compound information at all. Must score ~0 centered / ~0.5 retrieval.
-  qwen_ctx)    llm qwen_ctx --pool mean --epochs 2 --fields cell,time,dose ;;
+  # Same 6-epoch config as the other ablations (a first 2-epoch version is kept as
+  # results/logs/qwen_ctx_2ep.*: a longer run has more chances to exploit any leak).
+  qwen_ctx)    llm qwen_ctx "${MAIN[@]}" --fields cell,time,dose ;;
+  # Full fine-tuning: all ~494M weights trainable instead of LoRA adapters; 10x lower LR than LoRA.
+  # Completes the adaptation ladder frozen probe -> LoRA -> all weights.
+  qwen_allweights) llm qwen_allweights "${MAIN[@]}" --mode full --lr 2e-5 ;;
   queue)       for r in qwen_main qwen_smiles qwen_name qwen_ctx; do bash "$0" "$r"; done ;;
   resume)      for r in qwen_smiles_eval qwen_name qwen_ctx; do bash "$0" "$r"; done ;;
+  queue2)      for r in qwen_ctx qwen_allweights; do bash "$0" "$r"; done ;;
   *) echo "unknown run: $1" >&2; exit 1 ;;
 esac

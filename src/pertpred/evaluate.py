@@ -178,7 +178,7 @@ MODEL_ORDER = ["zero", "context_mean", "knn_tanimoto", "ridge_fp", "mlp_fp"]
 PLOT_GROUPS = [
     ("baselines", ["zero", "context_mean", "knn_tanimoto", "ridge_fp", "mlp_fp"]),
     ("frozen Qwen + MLP", ["probe_name+smiles_mean24", "probe_smiles_mean24", "probe_name_mean24", "probe_fp+qwen_mean24"]),
-    ("Qwen LoRA", ["qwen_full", "qwen_main", "qwen_smiles", "qwen_name", "qwen_ctx"]),
+    ("Qwen fine-tuned", ["qwen_full", "qwen_main", "qwen_allweights", "qwen_smiles", "qwen_name", "qwen_ctx"]),
 ]
 
 

@@ -85,7 +85,9 @@ start from the same metadata-only prediction and differ only in what they do wit
 similar training compounds measured in the same context, Morgan r=2, k=20 chosen on val);
 `ridge_fp` (Morgan bits + context one-hots, alpha chosen on val); `mlp_fp` (Morgan bits -> 512, plus
 learned cell / time / dose embeddings -> 978; early-stopped on val). `mlp_fp` is the bar to clear: it
-sees the same information as the LLM's SMILES line, with no language prior.
+sees the same information as the LLM's SMILES line, with no language prior. It is also the core of
+chemCPA (molecule + dose + cell -> response); why neither scVI nor a pretrained chemCPA is used is in
+DECISIONS D7 (wrong data / task, and a LINCS-pretrained checkpoint would have seen the test labels).
 
 **LLM** (`llm.py`). Qwen2.5-0.5B (revision `060db649...`) reads the condition as five lines of text
 (`cell line: A375 (skin)`, `time: 24 h`, `dose: 10 uM`, `compound: <name>`, `smiles: <SMILES>`).

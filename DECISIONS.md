@@ -148,6 +148,37 @@ on active signatures mean pooling moved the LoRA model from -0.020 to 0.027 and 
 change the headline number. Note `qwen_main` also trained 3x longer, so the two changes are
 confounded.
 
+## D7. No scVI or pretrained chemCPA as a baseline; the fingerprint MLP stands in for the chemCPA family
+
+**Chosen.** The neural baseline is `mlp_fp`: Morgan bits -> drug embedding, plus learned cell / time /
+dose embeddings -> 978-gene residual. No scVI, and no published perturbation-model checkpoint.
+
+**Alternatives.** (a) scVI. (b) CPA / chemCPA, the perturbation-response models from the same
+ecosystem. (c) A chemCPA checkpoint pretrained on LINCS.
+
+**Why.**
+- *scVI does not fit the data or the task.* It is an unsupervised generative model of single-cell
+  count data (count-based likelihood); L1000 Level 5 is bulk, bead-based, signed z-scores, with no
+  counts to model. It also takes no perturbation as input, so it cannot predict anything for a
+  compound it has not seen — the only question evaluated here.
+- *chemCPA is the right family, and `mlp_fp` is its core.* chemCPA encodes the molecule, dose and
+  cell context and decodes the expression response. What it adds is (i) an adversary that removes
+  drug information from the basal-state latent, which matters for transfer *across cell types* (not
+  this split), and (ii) cross-dataset transfer learning. Rebuilding it from scratch here would add
+  hours of adaptation for little expected change over `mlp_fp`.
+- *A pretrained chemCPA checkpoint is excluded by the leakage rule.* Its published transfer setup
+  pretrains on LINCS L1000 before fine-tuning on single-cell data, so its weights have seen L1000
+  expression labels, possibly for the very compounds held out here (Phase I and Phase II share
+  compounds). The datasheet forbids "external data known to contain LINCS expression labels"; a model
+  trained on that data is the same thing in a different form.
+- *Pretrained chemistry encoders are allowed* (they have seen structures, not expression) and are a
+  next step: they test the same question as the Qwen probe — does a pretrained molecule
+  representation beat fingerprints?
+
+**Would be wrong if** a from-scratch chemCPA (adversary included) beat `mlp_fp` clearly on
+`centered_pearson` under this compound split — then the disentanglement matters even without
+cross-cell transfer, and the strongest baseline here is understated.
+
 ---
 
 ## Dated notes
