@@ -26,7 +26,8 @@ def load_task() -> Task:
 
 
 class ContextMean:
-    """Training mean signature per context, backing off from (cell, time, dose) -> (cell, time) -> cell -> global.
+    """
+    Training mean signature per context, backing off from (cell, time, dose) -> (cell, time) -> cell -> global.
 
     A context needs `min_count` training signatures before its own mean is used; below that the mean
     is too noisy to beat the coarser level. This is the "metadata only" predictor: it knows the cell,
