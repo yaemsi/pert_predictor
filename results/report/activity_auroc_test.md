@@ -1,11 +1,13 @@
 |                          |   within-context AUROC (active | predicted strength) |
 |:-------------------------|-----------------------------------------------------:|
-| qwen_ctx                 |                                                0.494 |
+| qwen_ctx_2ep             |                                                0.494 |
 | context_mean             |                                                0.500 |
 | zero                     |                                                0.500 |
+| qwen_ctx                 |                                                0.508 |
 | qwen_name                |                                                0.519 |
 | probe_name+smiles_eos24  |                                                0.530 |
 | qwen_smiles              |                                                0.549 |
+| qwen_allweights          |                                                0.555 |
 | qwen_full                |                                                0.557 |
 | probe_name+smiles_eos12  |                                                0.557 |
 | probe_smiles_mean24      |                                                0.561 |

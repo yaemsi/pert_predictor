@@ -129,7 +129,33 @@
     "centered_pearson_active": 0.03640066779210394,
     "retrieval_active": 0.44276601829843154
   },
+  "qwen_allweights": {
+    "pearson": 0.18446299845156564,
+    "centered_pearson": 0.03977659095571485,
+    "delta_pearson": 0.06969929342764057,
+    "retrieval": 0.4560834045439411,
+    "topk_dir": 0.1447757008098129,
+    "rmse": 1.1283349324010468,
+    "n_signatures": 15231,
+    "n_compounds": 264,
+    "pearson_active": 0.28173008879672984,
+    "centered_pearson_active": 0.020655295465946796,
+    "retrieval_active": 0.4423025507192228
+  },
   "qwen_ctx": {
+    "pearson": 0.19983661077638357,
+    "centered_pearson": 0.0014949504067377562,
+    "delta_pearson": 0.014846783719204044,
+    "retrieval": 0.4991607992536272,
+    "topk_dir": 0.15510991124962442,
+    "rmse": 1.1243671193049494,
+    "n_signatures": 15231,
+    "n_compounds": 264,
+    "pearson_active": 0.3449276778883444,
+    "centered_pearson_active": 0.001606651675351715,
+    "retrieval_active": 0.4964608810113838
+  },
+  "qwen_ctx_2ep": {
     "pearson": 0.20006145027779984,
     "centered_pearson": -7.456069771765819e-05,
     "delta_pearson": 0.016666747146014887,

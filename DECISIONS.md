@@ -74,7 +74,8 @@ signatures.
 model with high `centered_pearson` but no retrieval ability, or one whose gain is confined to
 inactive signatures. Both are reported side by side to catch exactly that.
 
-**Outcome.** The null checks hold exactly (`zero`, `context_mean`, `qwen_ctx`). The failure mode it
+**Outcome.** The null checks hold (`zero` and `context_mean` exactly; `qwen_ctx` at 0.001, traced to
+exact recorded doses within a dose bin, not to compound information). The failure mode it
 was designed to catch did occur: the single-channel LLMs earn their `centered_pearson` almost
 entirely on inactive signatures (active-only ~0). That is visible only because the active stratum
 is reported next to the overall number — keep reporting both.
@@ -118,6 +119,10 @@ generative variant beats the head on `topk_dir`.
 **Outcome (partly triggered).** LoRA vs frozen probe: `centered_pearson` +0.006 [-0.004, +0.016]
 (no detectable gain), retrieval -0.020 [-0.040, 0.000] (borderline gain). Fine-tuning buys little on
 this data. The generative alternative was not run, so the second condition is untested.
+Full fine-tuning (`qwen_allweights`, all 494.9M weights, lr 2e-5) was run later to test the choice
+directly: -0.005 [-0.013, +0.002] vs LoRA, val peaking at epoch 2 then declining (overfitting), and
+significantly below `mlp_fp` (-0.014 [-0.027, -0.001]). More capacity does not help here, which is
+the result that would have to be false for LoRA to be the wrong call.
 
 ## D6. Choose the LLM's read-out with a cheap frozen probe before spending GPU on LoRA
 
@@ -235,3 +240,11 @@ cross-cell transfer, and the strongest baseline here is understated.
   rows. Recorded as an unchecked failure mode in the writeup.
 - Cache moved to `data/pre-processed/` (the workspace's own slot for derived data; `submit` skips
   `data/`). Level 3 decompressed there too (17 GB) for the notebook's raw-vs-differential section.
+
+**2026-10-08**
+- Reran the drug-free control `qwen_ctx` at 6 epochs to match the other ablations (the 2-epoch run is
+  kept as `qwen_ctx_2ep`): 0.001 [0.001, 0.002] / retrieval 0.499. The residue is not leakage: the
+  prompt carries the exact recorded dose, 0.6% of test signatures sit slightly off their dose bin,
+  and predictions vary only along exact dose (zero spread within an exact dose).
+- Full fine-tuning (`qwen_allweights`): ties LoRA, overfits from epoch 2 (D5 outcome updated).
+- Added D7 (no scVI / pretrained chemCPA).

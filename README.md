@@ -15,7 +15,7 @@ Qwen2.5-0.5B, against strong non-LLM baselines.
 On 264 held-out compounds, Qwen2.5-0.5B with LoRA reading the condition as text reaches centered
 Pearson 0.045 and retrieval rank 0.449 (0.5 = chance), statistically tied with an MLP on Morgan
 fingerprints (0.054 / 0.442) and weaker on signatures with real signal. A context-only version of
-the same model scores exactly the null, so the gain comes from the compound text. Details, failure
+the same model scores the null (0.001), so the gain comes from the compound text. Details, failure
 modes and next steps in [`WRITEUP.md`](WRITEUP.md); headline figure `results/report/models_test.png`.
 
 ## Task in one paragraph

@@ -4,7 +4,7 @@
 "cell / time / dose / name / SMILES" as text **ties a fingerprint MLP** (centered Pearson 0.045 vs
 0.054, paired difference -0.009 [-0.022, +0.004]) and is **weaker on the signatures that carry real
 signal** (0.027 vs 0.055). Both are far above every compound-agnostic predictor, and a context-only
-version of the same LLM scores exactly the null, so the gains come from the compound text, not
+version of the same LLM scores the null (0.001), so the gains come from the compound text, not
 metadata. The bigger result is about measurement: on this data the default metric (per-signature
 Pearson) is saturated by context, and its obvious fix is gameable by predicting nothing; the
 evaluation here is built so that neither shortcut scores.
@@ -103,8 +103,10 @@ with *frozen* Qwen and pass the embedding through the *same* MLP as `mlp_fp`. Te
 pretrained representation of a compound beats Morgan bits under an identical downstream model, and
 picks the pooling / layer for LoRA on val.
 
-**Ablations at the main config.** `qwen_smiles` (no name line), `qwen_name` (no SMILES line),
-`qwen_ctx` (no compound at all: a leakage check that must score the null).
+**Ablations at the main config** (all 6 epochs). `qwen_smiles` (no name line), `qwen_name` (no
+SMILES line), `qwen_ctx` (no compound at all: a leakage check that must score the null), and
+`qwen_allweights` (full fine-tuning of all 494.9M weights instead of LoRA, learning rate 2e-5) to
+test whether more adaptation capacity helps.
 
 ## 5. Results
 
@@ -115,7 +117,7 @@ Full table with every metric and every probe variant: `results/report/summary_te
 | model | centered Pearson | retrieval (0.5 = chance) | centered, active | retrieval, active | raw Pearson |
 |---|---|---|---|---|---|
 | context_mean | 0.000 | 0.500 | 0.000 | 0.500 | 0.200 |
-| qwen_ctx (no compound) | -0.000 [-0.001, 0.001] | 0.500 [0.494, 0.503] | 0.002 | 0.496 | 0.200 |
+| qwen_ctx (no compound) | 0.001 [0.001, 0.002] | 0.499 [0.497, 0.501] | 0.002 | 0.496 | 0.200 |
 | knn_tanimoto | 0.043 [0.033, 0.054] | 0.438 [0.420, 0.455] | **0.067** | **0.404** | 0.172 |
 | ridge_fp | 0.041 [0.031, 0.054] | 0.440 [0.418, 0.460] | 0.045 | 0.425 | 0.201 |
 | **mlp_fp** | **0.054 [0.041, 0.068]** | 0.442 [0.420, 0.462] | 0.055 | 0.412 | 0.181 |
@@ -125,6 +127,7 @@ Full table with every metric and every probe variant: `results/report/summary_te
 | **qwen_main** (LoRA, name+SMILES) | 0.045 [0.034, 0.057] | 0.449 [0.429, 0.470] | 0.027 | 0.435 | 0.187 |
 | qwen_smiles | 0.039 [0.028, 0.050] | 0.471 [0.453, 0.489] | 0.010 | 0.453 | 0.194 |
 | qwen_name | 0.031 [0.022, 0.039] | 0.468 [0.448, 0.488] | -0.005 | 0.459 | 0.174 |
+| qwen_allweights (full fine-tuning) | 0.040 [0.029, 0.051] | 0.456 [0.436, 0.477] | 0.021 | 0.442 | 0.184 |
 
 ![models](results/report/models_test.png)
 
@@ -139,13 +142,20 @@ negative retrieval = better):
 | qwen_main - qwen_name (value of SMILES) | **+0.014 [+0.004, +0.026]** | -0.019 [-0.042, +0.002] |
 | qwen_main - qwen_smiles (value of the name) | +0.006 [-0.005, +0.017] | -0.022 [-0.044, -0.000] |
 | qwen_main - frozen probe (value of LoRA) | +0.006 [-0.004, +0.016] | -0.020 [-0.040, +0.000] |
+| qwen_allweights - qwen_main (full vs LoRA) | -0.005 [-0.013, +0.002] | +0.007 [-0.010, +0.024] |
+| qwen_allweights - frozen probe | +0.001 [-0.010, +0.010] | -0.013 [-0.034, +0.009] |
+| qwen_allweights - mlp_fp | -0.014 [-0.027, -0.001] | +0.014 [-0.012, +0.039] |
 
 Training-seed spread of `mlp_fp` (4 seeds): `centered_pearson` 0.049–0.053, retrieval 0.444–0.450.
 LLM runs are single-seed (see caveats).
 
 **What the numbers say.**
 1. *Is the LLM using the compound or metadata shortcuts?* The compound. `qwen_ctx`, the same model
-   without the compound lines, scores the null on every compound-specific metric.
+   without the compound lines and trained just as long, scores 0.001 / 0.499. The 0.001 is
+   statistically above zero but comes from the exact recorded dose: 98 test signatures (0.6%) have a
+   dose slightly off their dose bin, the prompt carries the exact dose, and the model's predictions
+   vary *only* along that axis (within an exact dose their spread is 0). Centered Pearson is
+   scale-free, so even that 1e-5-sized variation registers.
 2. *Would a simple baseline embarrass it?* Not embarrass, but match: a fingerprint MLP is as good
    overall and better on active signatures, and Tanimoto kNN is the best model on active signatures.
 3. *Chemistry or world knowledge?* Mostly chemistry. Removing SMILES costs a significant 0.014 in
@@ -153,8 +163,11 @@ LLM runs are single-seed (see caveats).
    retrieval (borderline: the CI touches 0). The name alone does carry signal (0.031, above the
    null), so Qwen's pretrained knowledge of drug names is real but small and largely redundant with
    structure.
-4. *Does fine-tuning matter?* A little. LoRA beats the frozen probe mainly on retrieval
-   (-0.020 [-0.040, 0.000]); on centered Pearson the gain is within noise.
+4. *Does fine-tuning matter?* A little, and more of it does not help. Along the adaptation ladder
+   frozen (0.039) -> LoRA, 9.7M weights (0.045) -> all 494.9M weights (0.040), LoRA is the best point
+   but the differences are within noise; LoRA's gain over frozen shows mainly in retrieval
+   (-0.020 [-0.040, 0.000]). Full fine-tuning overfits: val peaked at epoch 2 and declined while
+   training loss kept falling, and it ends significantly below `mlp_fp`.
 
 **Knowing *whether* vs knowing *what*.** `centered_pearson` mixes two abilities: ranking compounds by
 how strongly they act, and getting the direction of the response right. Scoring predicted response
@@ -162,8 +175,9 @@ strength as a classifier of the active flag, within context (`results/report/act
 
 | model | AUROC (active \| predicted strength) |
 |---|---|
-| qwen_ctx | 0.494 |
+| qwen_ctx | 0.508 |
 | qwen_name | 0.519 |
+| qwen_allweights | 0.555 |
 | qwen_smiles | 0.549 |
 | knn_tanimoto | 0.582 |
 | qwen_main | 0.585 |
@@ -228,6 +242,8 @@ not scaffold.
 | frozen probe | mean pooling best on val; frozen Qwen < Morgan bits | LoRA with mean pooling, 6 epochs |
 | `qwen_main` | ties MLP overall, behind on active | ablations to see what it uses |
 | hypothesis: "LLM knows *whether* not *what*" | half wrong: it knows *whether* as well as FP | reported as a direction gap, not an activity gap |
+| drug-free control at 2 epochs | null, but shorter than the other ablations | rerun at 6 epochs: still null (0.001, explained by exact dose) |
+| LoRA rather than full fine-tuning (argued) | full fine-tuning run: overfits by epoch 2, ties LoRA | LoRA choice now backed by a measurement |
 
 ## 8. What I would do next
 
